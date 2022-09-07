@@ -32,8 +32,8 @@ const Home: NextPage = () => {
         </div>
         <div className="mx-auto mt-5 w-10/12 rounded-xl bg-blue-400 py-3 text-center text-white">Checkout</div>
       </div>
-      <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
-        <div className="bg-blue-400 p-8 pb-14">
+      <div className="group overflow-hidden rounded-3xl bg-white shadow-2xl">
+        <div className="bg-blue-400 p-8 pb-14 transition-colors group-hover:bg-red-400">
           <span className="text-xl font-medium text-white">Profile</span>
         </div>
         <div className="relative -top-8 rounded-3xl bg-white p-6">
