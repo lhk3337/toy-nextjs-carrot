@@ -2,20 +2,10 @@ import type { NextPage } from "next";
 import Image from "next/image";
 const Home: NextPage = () => {
   return (
-    <form className="flex flex-col space-y-3 bg-blue-500 p-5 focus-within:bg-blue-100">
-      <input
-        type="text"
-        placeholder="username"
-        disabled
-        className="border-violet-400 required:border-4 disabled:opacity-0"
-      />
-      <input
-        type="text"
-        required
-        placeholder="Email"
-        className="placeholder:text-white placeholder-shown:bg-teal-500"
-      />
-      <input type="password" placeholder="Password" required className="border-red-500 invalid:border-4" />
+    <form className="flex flex-col space-y-2 p-5">
+      <input type="text" placeholder="username" required className="peer rounded-md border border-gray-400 p-1" />
+      <span className="hidden peer-invalid:block peer-invalid:text-red-600">This input is invalid.</span>
+      <span className="hidden peer-valid:block peer-valid:text-teal-600">Aewsome username.</span>
       <input type="submit" className="bg-white" value="Login" />
     </form>
   );
