@@ -3,7 +3,7 @@ import Image from "next/image";
 const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col space-y-10 bg-slate-300 p-20">
-      <div className="rounded-3xl bg-white p-8 shadow-2xl">
+      <div className="rounded-3xl bg-white p-8 shadow-2xl sm:bg-blue-300 md:bg-yellow-300 lg:bg-red-300 xl:bg-green-300 2xl:bg-purple-300">
         <span className="text-xl font-bold">Select Item</span>
         <div className="my-2 flex justify-between">
           <span className="text-gray-400">Grey Chair</span>
