@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import Image from "next/image";
 const Home: NextPage = () => {
   return (
-    <div className="flex min-h-screen flex-col space-y-10 bg-slate-300 p-20">
-      <div className="rounded-3xl bg-white p-8 shadow-2xl sm:bg-blue-300 md:bg-yellow-300 lg:bg-red-300 xl:bg-green-300 2xl:bg-purple-300">
+    <div className=" grid min-h-screen gap-10 bg-slate-300 p-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
+      <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-2xl">
         <span className="text-xl font-bold">Select Item</span>
         <div className="my-2 flex justify-between">
           <span className="text-gray-400">Grey Chair</span>
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <div className="mx-auto mt-5 w-1/2 rounded-3xl bg-blue-400 py-3 text-center text-white">Checkout</div>
       </div>
       <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
-        <div className="bg-blue-400 p-8 pb-14">
+        <div className=" p-8 pb-14 xl:pb-40 portrait:bg-indigo-600 landscape:bg-teal-500">
           <span className="text-xl font-medium text-white">Profile</span>
         </div>
         <div className="relative -top-8 rounded-3xl bg-white p-6">
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="rounded-3xl bg-white p-8 px-6 shadow-2xl">
+      <div className="rounded-3xl bg-white p-8 px-6 shadow-2xl lg:col-span-2 xl:col-span-1">
         <div className="mb-5 flex justify-between">
           <span>←</span>
           <div className="flex items-center space-x-3">
