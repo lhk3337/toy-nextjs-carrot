@@ -3,21 +3,23 @@ import Image from "next/image";
 const Home: NextPage = () => {
   return (
     <div className=" grid min-h-screen gap-10 bg-slate-300 p-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
-      <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-2xl">
-        <span className="text-xl font-bold">Select Item</span>
+      <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-2xl dark:bg-black">
+        <span className="text-xl font-bold dark:text-white">Select Item</span>
         <div className="my-2 flex justify-between">
-          <span className="text-gray-400">Grey Chair</span>
-          <span className="font-semibold">$18</span>
+          <span className="text-gray-400 dark:text-gray-50">Grey Chair</span>
+          <span className="font-semibold dark:text-white">$18</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-400">Tooly Table</span>
-          <span className="font-semibold">$80</span>
+          <span className="text-gray-400 dark:text-gray-50">Tooly Table</span>
+          <span className="font-semibold dark:text-white">$80</span>
         </div>
         <div className="mt-2 flex justify-between border-t-2 border-dashed pt-2">
-          <span>Total</span>
-          <span className="font-semibold">$98</span>
+          <span className="dark:text-gray-50">Total</span>
+          <span className="font-semibold dark:text-white">$98</span>
         </div>
-        <div className="mx-auto mt-5 w-1/2 rounded-3xl bg-blue-400 py-3 text-center text-white">Checkout</div>
+        <div className="mx-auto mt-5 w-1/2 rounded-3xl bg-blue-400 py-3 text-center text-white dark:border dark:border-white dark:bg-black dark:hover:bg-white dark:hover:text-black">
+          Checkout
+        </div>
       </div>
       <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
         <div className=" p-8 pb-14 xl:pb-40 portrait:bg-indigo-600 landscape:bg-teal-500">
