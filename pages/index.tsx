@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 const Home: NextPage = () => {
   return (
-    <div className=" grid min-h-screen gap-10 bg-slate-300 p-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
+    <div className="dark grid min-h-screen gap-10 bg-slate-300 p-20 lg:grid-cols-2 xl:grid-cols-3 xl:place-content-center">
       <div className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-2xl dark:bg-black">
         <span className="text-xl font-bold dark:text-white">Select Item</span>
         <div className="my-2 flex justify-between">
