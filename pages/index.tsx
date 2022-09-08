@@ -2,12 +2,12 @@ import type { NextPage } from "next";
 import Image from "next/image";
 const Home: NextPage = () => {
   return (
-    <form className="flex flex-col space-y-2 p-5">
-      <input type="text" placeholder="username" required className="peer rounded-md border border-gray-400 p-1" />
-      <span className="hidden peer-invalid:block peer-invalid:text-red-600">This input is invalid.</span>
-      <span className="hidden peer-valid:block peer-valid:text-teal-600">Aewsome username.</span>
-      <input type="submit" className="bg-white" value="Login" />
-    </form>
+    <div className="flex flex-col space-y-2 p-5">
+      <details className="select-none open:bg-indigo-300 open:text-white">
+        <summary className="cursor-pointer">What is my fav. food.</summary>
+        <span>kimchi</span>
+      </details>
+    </div>
   );
 };
 export default Home;
