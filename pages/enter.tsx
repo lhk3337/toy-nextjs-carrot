@@ -9,7 +9,7 @@ export default function Enter() {
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
   return (
-    <div className="mx-auto mt-16 flex max-w-lg flex-col">
+    <div className="mt-16 flex flex-col px-4">
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
       <div className="mt-11">
         <div className="flex flex-col items-center">
