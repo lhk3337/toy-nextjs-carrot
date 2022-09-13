@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 
 const Upload: NextPage = () => {
   return (
-    <div className="px-4 py-16">
+    <div className="space-y-5 px-4 py-10">
       <div>
         <label className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-orange-500 hover:text-orange-500">
           <svg className="h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -16,7 +16,19 @@ const Upload: NextPage = () => {
           <input className="hidden" type="file" />
         </label>
       </div>
-      <div className="my-5">
+      <div>
+        <label className="mb-1 block text-sm font-medium text-gray-500" htmlFor="name">
+          Name
+        </label>
+        <div className="relative flex items-center rounded-md shadow-sm">
+          <input
+            type="text"
+            id="name"
+            className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
+          />
+        </div>
+      </div>
+      <div>
         <label className="mb-1 block text-sm font-medium text-gray-500" htmlFor="price">
           Price
         </label>
@@ -42,7 +54,7 @@ const Upload: NextPage = () => {
           rows={4}
         />
       </div>
-      <button className=" shaodw-sm mt-5 w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+      <button className=" shaodw-sm w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
         Upload product
       </button>
     </div>
