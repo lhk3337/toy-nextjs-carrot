@@ -17,7 +17,7 @@ const LiveDetail: NextPage = () => {
             anybody else is in there, you the first motherfucker to get shot. You understand?
           </p>
         </div>
-        <div className="h-[50vh] space-y-6 overflow-y-scroll px-4 py-10  pb-14">
+        <div className="h-[50vh] space-y-6 overflow-y-scroll px-4 py-10  pb-14 scrollbar-hide">
           {Array(8)
             .fill("")
             .map((_, i) => (
