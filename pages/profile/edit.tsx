@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Layout from "../../components/layout";
-
+import Input from "../../components/input";
 const Edit: NextPage = () => {
   return (
     <Layout canGoBack title="Edit Profile">
@@ -16,32 +16,10 @@ const Edit: NextPage = () => {
           </label>
         </div>
         <div className="space-y-1">
-          <label htmlFor="email" className="mb-2 text-sm font-medium text-gray-500">
-            Email address
-          </label>
-          <input
-            type="email"
-            placeholder="이메일을 입력해주세요"
-            required
-            id="email"
-            className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
-          />
+          <Input label="Email address" name="email" type="email" placeholder="이메일을 입력해주세요" required />
         </div>
         <div className="space-y-1">
-          <label htmlFor="number" className="mb-2 text-sm font-medium text-gray-500">
-            Phone number
-          </label>
-          <div className="flex rounded-sm shadow-sm">
-            <span className="flex select-none items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
-              +82
-            </span>
-            <input
-              type="number"
-              required
-              id="number"
-              className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
-            />
-          </div>
+          <Input kind="phone" label="Phone number" name="phone" type="number" required />
         </div>
         <button className=" shaodw-sm mt-5 w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
           Update Profile
