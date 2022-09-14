@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Layout from "../../components/layout";
+import TextArea from "../../components/textarea";
 const Create: NextPage = () => {
   return (
     <Layout canGoBack title="Create Live Stream">
@@ -36,11 +37,7 @@ const Create: NextPage = () => {
           </div>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-500">Description</label>
-          <textarea
-            className="bordr-gray-300 mt-1 w-full rounded-md shadow-sm focus:border-orange-500  focus:ring-orange-500"
-            rows={4}
-          />
+          <TextArea label="Description" name="desc" rows={4} />
         </div>
         <button className=" shaodw-sm w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
           Go Live
