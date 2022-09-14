@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Input from "../../components/input";
 import Layout from "../../components/layout";
 import TextArea from "../../components/textarea";
+import Button from "../../components/button";
 
 const Upload: NextPage = () => {
   return (
@@ -29,9 +30,7 @@ const Upload: NextPage = () => {
         <div>
           <TextArea label="Description" name="desc" rows={4} />
         </div>
-        <button className=" shaodw-sm w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-          Upload product
-        </button>
+        <Button text="Upload product" />
       </div>
     </Layout>
   );

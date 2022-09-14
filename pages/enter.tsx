@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../components/button";
 import Input from "../components/input";
 import { cls } from "../libs/utils";
 
@@ -36,7 +37,7 @@ export default function Enter() {
             </button>
           </div>
         </div>
-        <form className="mt-8 flex flex-col">
+        <form className="mt-8 flex flex-col space-y-4">
           <div className="mt-2">
             {method === "email" ? (
               <Input label="Email address" name="email" type="email" placeholder="이메일을 입력해주세요" required />
@@ -45,10 +46,8 @@ export default function Enter() {
               <Input kind="phone" label="Phone number" name="phone" type="number" required />
             ) : null}
           </div>
-          <button className=" shaodw-sm mt-5 rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+          {method === "email" ? <Button text="Get login link" /> : null}
+          {method === "phone" ? <Button text="Get one-time password" /> : null}
         </form>
         <div className="mt-6">
           <div className="relative">

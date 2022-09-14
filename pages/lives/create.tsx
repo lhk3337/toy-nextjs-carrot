@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Button from "../../components/button";
 import Layout from "../../components/layout";
 import TextArea from "../../components/textarea";
 const Create: NextPage = () => {
@@ -39,9 +40,7 @@ const Create: NextPage = () => {
         <div>
           <TextArea label="Description" name="desc" rows={4} />
         </div>
-        <button className=" shaodw-sm w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-          Go Live
-        </button>
+        <Button text="Go Live" />
       </div>
     </Layout>
   );

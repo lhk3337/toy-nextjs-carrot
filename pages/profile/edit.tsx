@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Layout from "../../components/layout";
 import Input from "../../components/input";
+import Button from "../../components/button";
 const Edit: NextPage = () => {
   return (
     <Layout canGoBack title="Edit Profile">
@@ -21,9 +22,7 @@ const Edit: NextPage = () => {
         <div className="space-y-1">
           <Input kind="phone" label="Phone number" name="phone" type="number" required />
         </div>
-        <button className=" shaodw-sm mt-5 w-full rounded-md border border-transparent bg-orange-500 py-2 px-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-          Update Profile
-        </button>
+        <Button text="Update Profile" />
       </form>
     </Layout>
   );
