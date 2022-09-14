@@ -13,7 +13,7 @@ const Live: NextPage = () => {
               <h1 className="mt-2 text-2xl font-bold text-gray-700">Galaxy S50</h1>
             </div>
           ))}
-        <FixedButton type="video" href="/streams/create" />
+        <FixedButton type="video" href="/lives/create" />
       </div>
     </Layout>
   );
