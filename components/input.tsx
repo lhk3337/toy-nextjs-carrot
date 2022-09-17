@@ -1,10 +1,15 @@
+import { UseFormRegisterReturn } from "react-hook-form";
+
 interface InputProps {
   name: string;
   label: string;
   kind?: "text" | "phone" | "price";
-  [key: string]: any;
+  type: React.HTMLInputTypeAttribute;
+  placeholder?: string;
+  register: UseFormRegisterReturn;
+  required: boolean;
 }
-export default function Input({ name, label, kind = "text", ...rest }: InputProps) {
+export default function Input({ name, label, kind = "text", register, placeholder, type, required }: InputProps) {
   return (
     <>
       <label className="mb-2 text-sm font-medium text-gray-500" htmlFor={name}>
@@ -14,7 +19,9 @@ export default function Input({ name, label, kind = "text", ...rest }: InputProp
         {kind === "text" ? (
           <div className="flex rounded-sm shadow-sm">
             <input
-              {...rest}
+              {...register}
+              required={required}
+              type={type}
               id={name}
               className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
@@ -26,7 +33,9 @@ export default function Input({ name, label, kind = "text", ...rest }: InputProp
               +82
             </span>
             <input
-              {...rest}
+              {...register}
+              required={required}
+              type={type}
               id={name}
               className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
@@ -39,7 +48,10 @@ export default function Input({ name, label, kind = "text", ...rest }: InputProp
             </div>
             <input
               id={name}
-              {...rest}
+              {...register}
+              required={required}
+              placeholder={placeholder}
+              type={type}
               className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pl-7 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
             <div className="pointer-events-none  absolute right-0 flex items-center pr-3">

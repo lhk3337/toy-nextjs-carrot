@@ -1,12 +1,31 @@
 import { useState } from "react";
 import Button from "../components/button";
 import Input from "../components/input";
+import { useForm } from "react-hook-form";
 import { cls } from "../libs/utils";
 
+interface EnterForm {
+  email?: string;
+  phone?: string;
+}
+
 export default function Enter() {
+  const { register, handleSubmit, reset } = useForm<EnterForm>();
+
   const [method, setMethod] = useState("email");
-  const onEmailClick = () => setMethod("email");
-  const onPhoneClick = () => setMethod("phone");
+  const onEmailClick = () => {
+    reset();
+    setMethod("email");
+  };
+  const onPhoneClick = () => {
+    reset();
+    setMethod("phone");
+  };
+
+  const onValid = (data: EnterForm) => {
+    console.log(data);
+  };
+
   return (
     <div className="mt-16 flex flex-col px-4">
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
@@ -37,13 +56,27 @@ export default function Enter() {
             </button>
           </div>
         </div>
-        <form className="mt-8 flex flex-col space-y-4">
+        <form onSubmit={handleSubmit(onValid)} className="mt-8 flex flex-col space-y-4">
           <div className="mt-2">
             {method === "email" ? (
-              <Input label="Email address" name="email" type="email" placeholder="이메일을 입력해주세요" required />
+              <Input
+                register={register("email")}
+                label="Email address"
+                name="email"
+                type="email"
+                placeholder="이메일을 입력해주세요"
+                required
+              />
             ) : null}
             {method === "phone" ? (
-              <Input kind="phone" label="Phone number" name="phone" type="number" required />
+              <Input
+                register={register("phone")}
+                kind="phone"
+                label="Phone number"
+                name="phone"
+                type="number"
+                required
+              />
             ) : null}
           </div>
           {method === "email" ? <Button text="Get login link" /> : null}
