@@ -5,21 +5,26 @@ interface LoginForm {
   password: string;
   username: string;
   email: string;
+  errors?: string;
 }
 
 const Home: NextPage = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    setError,
     formState: { errors },
   } = useForm<LoginForm>({ mode: "onChange" });
   const onValid = (data: LoginForm) => {
     console.log("valid");
+    setError("errors", { message: "Sorry, BackEnd Down Errors" });
   };
 
   const onInvalid = (errors: FieldErrors) => {
     console.log(errors);
   };
+  setValue("username", "hello");
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)}>
@@ -47,6 +52,7 @@ const Home: NextPage = () => {
       {errors.email?.message}
       <input {...register("password", { required: "password is required" })} type="password" placeholder="Password" />
       <input type="submit" value="Create Account" />
+      {errors.errors?.message}
     </form>
   );
 };
