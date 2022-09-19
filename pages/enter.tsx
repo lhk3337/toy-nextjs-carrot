@@ -2,7 +2,8 @@ import { useState } from "react";
 import Button from "../components/button";
 import Input from "../components/input";
 import { useForm } from "react-hook-form";
-import { cls } from "../libs/utils";
+import { cls } from "../libs/client/utils";
+import useMutation from "../libs/client/useMutation";
 
 interface EnterForm {
   email?: string;
@@ -10,7 +11,8 @@ interface EnterForm {
 }
 
 export default function Enter() {
-  const [submitting, setSubmitting] = useState(false);
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
+  // const [submitting, setSubmitting] = useState(false);
   const { register, handleSubmit, reset } = useForm<EnterForm>();
 
   const [method, setMethod] = useState<"email" | "phone">("email");
@@ -23,15 +25,16 @@ export default function Enter() {
     setMethod("phone");
   };
 
-  const onValid = (data: EnterForm) => {
-    setSubmitting(true);
-    fetch("/api/users/enter", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    }).then(() => setSubmitting(false));
+  const onValid = (validForm: EnterForm) => {
+    // setSubmitting(true);
+    enter(validForm);
+    // fetch("/api/users/enter", {
+    //   method: "POST",
+    //   body: JSON.stringify(data),
+    //   headers: { "Content-Type": "application/json" },
+    // }).then(() => setSubmitting(false));
   };
-
+  console.log(loading, data, error);
   return (
     <div className="mt-16 flex flex-col px-4">
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
@@ -86,7 +89,7 @@ export default function Enter() {
             ) : null}
           </div>
           {method === "email" ? <Button text="Get login link" /> : null}
-          {method === "phone" ? <Button text={submitting ? "Loading" : "Get one-time password"} /> : null}
+          {method === "phone" ? <Button text={loading ? "Loading" : "Get one-time password"} /> : null}
         </form>
         <div className="mt-6">
           <div className="relative">
