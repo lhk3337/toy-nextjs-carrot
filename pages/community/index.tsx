@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import FixedButton from "../../components/fixedCircleBtn";
-import Layout from "../../components/layout";
+import FixedButton from "@components/fixedCircleBtn";
+import Layout from "@components/layout";
 
 const Community: NextPage = () => {
   return (

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import FixedButton from "../components/fixedCircleBtn";
-import Layout from "../components/layout";
-import Items from "../components/items";
+import FixedButton from "@components/fixedCircleBtn";
+import Layout from "@components/layout";
+import Items from "@components/items";
 const Home: NextPage = () => {
   return (
     <Layout title="Home" hasTabBar>

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import Layout from "../../components/layout";
-import Input from "../../components/input";
-import Button from "../../components/button";
+import Layout from "@components/layout";
+import Input from "@components/input";
+import Button from "@components/button";
 const Edit: NextPage = () => {
   return (
     <Layout canGoBack title="Edit Profile">
