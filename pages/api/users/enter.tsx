@@ -4,11 +4,43 @@ import client from "@libs/server/client";
 import withHandler from "@libs/server/withHandler";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let user;
   const {
     body: { email, phone },
   } = req;
+  const payload = phone ? { phone: +phone } : { email };
+  const user = await client.user.upsert({
+    where: { ...payload },
+    update: {},
+    create: { name: "Anonymous", ...payload },
+  });
 
+  /* upsert과 object 조건문
+  const user = await client.user.upsert({
+    where: { ...(phone && { phone: +phone }), ...(email ? { email } : {}) },
+    update: {},
+    create: { name: "Anonymous", ...(phone && { phone: +phone }), ...(email ? { email } : {}) },
+  });
+*/
+
+  /* if문과 upsert()
+  let user
+  if (phone) {
+    user = await client.user.upsert({
+      where: { phone: +phone },
+      update: {},
+      create: { name: "Anonymous", phone: +phone },
+    });
+  } else if (email) {
+    user = await client.user.upsert({
+      where: { email },
+      update: {},
+      create: { name: "Anonymous", email },
+    });
+  }
+ */
+
+  /*  if문
+let user
   if (email) {
     user = await client.user.findUnique({
       where: {
@@ -38,9 +70,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         data: { name: "Anonymous", phone: +phone },
       });
     }
-    console.log(user);
   }
+  */
 
+  console.log(user);
   res.status(200).end();
 }
 
