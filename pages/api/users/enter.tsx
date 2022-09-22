@@ -1,29 +1,34 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import client from "@libs/server/client";
-import withHandler from "@libs/server/withHandler";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const {
     body: { email, phone },
   } = req;
 
-  const payload = phone ? { phone: +phone } : { email };
-
+  const user = phone ? { phone: +phone } : email ? { email } : null;
+  if (!user) return res.status(400).json({ ok: false }); // phone, email이 없는경우 처리
+  const payload = String(Math.random()).substring(2, 8);
   const token = await client.token.create({
     data: {
-      payload: "1234",
-      user: { connectOrCreate: { where: { ...payload }, create: { name: "Anonymous", ...payload } } },
+      payload,
+      user: {
+        connectOrCreate: { where: { ...user }, create: { name: "Anonymous", ...user } },
+      },
     },
   });
-  console.log(token);
-  res.status(200).end();
+  // console.log(token);
+  return res.json({
+    ok: true,
+  });
 }
 
 export default withHandler("POST", handler);
 
 /* connect
-const payload = phone ? { phone: +phone } : { email };
+const user = phone ? { phone: +phone } : { email };
   const user = await client.user.upsert({
     where: { ...payload },
     update: {},

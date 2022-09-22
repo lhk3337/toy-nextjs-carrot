@@ -34,7 +34,7 @@ export default function Enter() {
     //   headers: { "Content-Type": "application/json" },
     // }).then(() => setSubmitting(false));
   };
-  console.log(loading, data, error);
+
   return (
     <div className="mt-16 flex flex-col px-4">
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>

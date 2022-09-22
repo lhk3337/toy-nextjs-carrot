@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
+export interface ResponseType {
+  ok: boolean;
+  [key: string]: any;
+}
 export default function withHandler(
   methods: "GET" | "POST" | "DELETE",
   handler: (req: NextApiRequest, res: NextApiResponse) => void
