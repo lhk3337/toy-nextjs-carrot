@@ -1,7 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
+import twilio from "twilio";
 import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
+
+// const accountSid = process.env.TWILIO_SID;
+// const authToken = process.env.TWILIO_TOKEN;
+
+const { TWILIO_SID, TWILIO_TOKEN, PHONE_NUMBER, TWILIO_MSID } = process.env;
+
+const twilioClient = twilio(TWILIO_SID, TWILIO_TOKEN);
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const {
@@ -10,7 +17,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 
   const user = phone ? { phone: +phone } : email ? { email } : null;
   if (!user) return res.status(400).json({ ok: false }); // phone, email이 없는경우 처리
+
   const payload = String(Math.random()).substring(2, 8);
+
   const token = await client.token.create({
     data: {
       payload,
@@ -19,7 +28,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
     },
   });
-  // console.log(token);
+
+  if (phone) {
+    const message = await twilioClient.messages.create({
+      to: PHONE_NUMBER!,
+      body: `캐럿마켓 인증번호는 ${payload} 입니다.`,
+      messagingServiceSid: TWILIO_MSID,
+    });
+
+    console.log(message);
+  }
+
   return res.json({
     ok: true,
   });
