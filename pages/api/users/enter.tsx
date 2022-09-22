@@ -7,14 +7,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     body: { email, phone },
   } = req;
+
   const payload = phone ? { phone: +phone } : { email };
+
+  const token = await client.token.create({
+    data: {
+      payload: "1234",
+      user: { connectOrCreate: { where: { ...payload }, create: { name: "Anonymous", ...payload } } },
+    },
+  });
+  console.log(token);
+  res.status(200).end();
+}
+
+export default withHandler("POST", handler);
+
+/* connect
+const payload = phone ? { phone: +phone } : { email };
   const user = await client.user.upsert({
     where: { ...payload },
     update: {},
     create: { name: "Anonymous", ...payload },
   });
 
-  /* upsert과 object 조건문
+  const token = await client.token.create({ data: { payload: "1234", user: { connect: { id: user.id } } } });
+*/
+
+/* upsert과 object 조건문
   const user = await client.user.upsert({
     where: { ...(phone && { phone: +phone }), ...(email ? { email } : {}) },
     update: {},
@@ -22,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 */
 
-  /* if문과 upsert()
+/* if문과 upsert()
   let user
   if (phone) {
     user = await client.user.upsert({
@@ -39,7 +58,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
  */
 
-  /*  if문
+/*  if문
 let user
   if (email) {
     user = await client.user.findUnique({
@@ -73,8 +92,4 @@ let user
   }
   */
 
-  console.log(user);
-  res.status(200).end();
-}
-
-export default withHandler("POST", handler);
+// console.log(user);
