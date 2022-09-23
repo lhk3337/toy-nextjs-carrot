@@ -10,10 +10,20 @@ interface EnterForm {
   phone?: string;
 }
 
+interface TokenForm {
+  token: string;
+}
+
+interface MutationResult {
+  ok: boolean;
+}
+
 export default function Enter() {
-  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
-  // const [submitting, setSubmitting] = useState(false);
+  const [enter, { loading, data, error }] = useMutation<MutationResult>("/api/users/enter");
+  const [confirmToken, { loading: tokenLoading, data: tokenData }] = useMutation<MutationResult>("/api/users/confirm");
+
   const { register, handleSubmit, reset } = useForm<EnterForm>();
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } = useForm<TokenForm>();
 
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -26,6 +36,7 @@ export default function Enter() {
   };
 
   const onValid = (validForm: EnterForm) => {
+    if (loading) return;
     // setSubmitting(true);
     enter(validForm);
     // fetch("/api/users/enter", {
@@ -34,63 +45,79 @@ export default function Enter() {
     //   headers: { "Content-Type": "application/json" },
     // }).then(() => setSubmitting(false));
   };
+  const onTokenValid = (validForm: TokenForm) => {
+    if (tokenLoading) return;
+    confirmToken(validForm);
+  };
 
   return (
     <div className="mt-16 flex flex-col px-4">
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
       <div className="mt-11">
-        <div className="flex flex-col items-center">
-          <h5 className="mb-10 text-sm font-medium text-gray-400">Enter using:</h5>
-          <div className="grid w-full grid-cols-2 gap-16 border-b">
-            <button
-              onClick={onEmailClick}
-              className={cls(
-                "pb-2 font-medium",
-                method === "email"
-                  ? "border-b-2 border-b-orange-400 text-orange-400"
-                  : "border-transparent text-gray-500"
-              )}
-            >
-              Email
-            </button>
-            <button
-              onClick={onPhoneClick}
-              className={`pb-2 font-medium ${
-                method === "phone"
-                  ? "border-b-2 border-b-orange-400 text-orange-400"
-                  : "border-transparent text-gray-500"
-              } `}
-            >
-              Phone
-            </button>
-          </div>
-        </div>
-        <form onSubmit={handleSubmit(onValid)} className="mt-8 flex flex-col space-y-4">
-          <div className="mt-2">
-            {method === "email" ? (
-              <Input
-                register={register("email")}
-                label="Email address"
-                name="email"
-                type="email"
-                placeholder="이메일을 입력해주세요"
-                required
-              />
-            ) : null}
-            {method === "phone" ? (
-              <Input
-                register={register("phone")}
-                kind="phone"
-                label="Phone number"
-                name="phone"
-                type="number"
-                required
-              />
-            ) : null}
-          </div>
-          {method === "email" ? <Button text={loading ? "Loading" : "Get login link"} /> : null}
-          {method === "phone" ? <Button text={loading ? "Loading" : "Get one-time password"} /> : null}
-        </form>
+        {data?.ok ? (
+          <form onSubmit={tokenHandleSubmit(onTokenValid)} className="mt-8 flex flex-col space-y-4">
+            <div className="mt-2">
+              <Input register={tokenRegister("token")} label="Confirmation Token" name="token" type="number" required />
+            </div>
+            <Button text={tokenLoading ? "Loading" : "Confirm Token"} />
+          </form>
+        ) : (
+          <>
+            <div className="flex flex-col items-center">
+              <h5 className="mb-10 text-sm font-medium text-gray-400">Enter using:</h5>
+              <div className="grid w-full grid-cols-2 gap-16 border-b">
+                <button
+                  onClick={onEmailClick}
+                  className={cls(
+                    "pb-2 font-medium",
+                    method === "email"
+                      ? "border-b-2 border-b-orange-400 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  )}
+                >
+                  Email
+                </button>
+                <button
+                  onClick={onPhoneClick}
+                  className={`pb-2 font-medium ${
+                    method === "phone"
+                      ? "border-b-2 border-b-orange-400 text-orange-400"
+                      : "border-transparent text-gray-500"
+                  } `}
+                >
+                  Phone
+                </button>
+              </div>
+            </div>
+            <form onSubmit={handleSubmit(onValid)} className="mt-8 flex flex-col space-y-4">
+              <div className="mt-2">
+                {method === "email" ? (
+                  <Input
+                    register={register("email")}
+                    label="Email address"
+                    name="email"
+                    type="email"
+                    placeholder="이메일을 입력해주세요"
+                    required
+                  />
+                ) : null}
+                {method === "phone" ? (
+                  <Input
+                    register={register("phone")}
+                    kind="phone"
+                    label="Phone number"
+                    name="phone"
+                    type="number"
+                    required
+                  />
+                ) : null}
+              </div>
+              {method === "email" ? <Button text={loading ? "Loading" : "Get login link"} /> : null}
+              {method === "phone" ? <Button text={loading ? "Loading" : "Get one-time password"} /> : null}
+            </form>
+          </>
+        )}
+
         <div className="mt-6">
           <div className="relative">
             <div className="absolute  w-full border-t border-gray-400" />
