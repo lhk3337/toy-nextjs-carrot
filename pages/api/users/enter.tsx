@@ -1,12 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
+import nodemailer from "nodemailer";
+
 import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
+import SendEmail from "@libs/server/email";
 
 // const accountSid = process.env.TWILIO_SID;
 // const authToken = process.env.TWILIO_TOKEN;
 
-const { TWILIO_SID, TWILIO_TOKEN, PHONE_NUMBER, TWILIO_MSID } = process.env;
+const { TWILIO_SID, TWILIO_TOKEN, PHONE_NUMBER, TWILIO_MSID, SEND_MAIL } = process.env;
 
 const twilioClient = twilio(TWILIO_SID, TWILIO_TOKEN);
 
@@ -37,6 +40,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     });
 
     console.log(message);
+  } else if (email) {
+    const mailOptions = {
+      from: SEND_MAIL,
+      to: email,
+      subject: "캐럿마켓 인증 요청 메일입니다.",
+      html: `
+      <div style="width:300px">
+        <p style="padding: 10px;border-radius:10px;background-color:#fb923c;width:300px;text-align:center;color:#ffff;font-size: 30px; margin-bottom:20px">
+          인증번호
+        </p>
+        <p style="color:#fb923c; font-weight:bold; font-size:20px; text-align:center">${payload}</p>
+      </div>
+    `,
+    };
+    SendEmail().sendMail(mailOptions, (error) => error && console.log(error));
   }
 
   return res.json({
