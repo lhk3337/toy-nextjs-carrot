@@ -18,7 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     body: { email, phone },
   } = req;
 
-  const user = phone ? { phone: +phone } : email ? { email } : null;
+  const user = phone ? { phone } : email ? { email } : null;
   if (!user) return res.status(400).json({ ok: false }); // phone, email이 없는경우 처리
 
   const payload = String(Math.random()).substring(2, 8);
