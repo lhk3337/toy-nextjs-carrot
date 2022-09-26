@@ -3,14 +3,22 @@ export interface ResponseType {
   ok: boolean;
   [key: string]: any;
 }
-export default function withHandler(
-  methods: "GET" | "POST" | "DELETE",
-  handler: (req: NextApiRequest, res: NextApiResponse) => void
-) {
+
+interface ConfigType {
+  methods: "GET" | "POST" | "DELETE";
+  handler: (req: NextApiRequest, res: NextApiResponse) => void;
+  isPrivate?: boolean;
+}
+
+export default function withHandler({ methods, isPrivate = false, handler }: ConfigType) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== methods) {
       return res.status(405).end();
     }
+    if (isPrivate && !req.session.user?.id) {
+      res.json({ ok: false, error: "plz log in." });
+    }
+
     try {
       handler(req, res);
     } catch (error) {
