@@ -4,7 +4,7 @@ import Layout from "@components/layout";
 import Items from "@components/items";
 import useUser from "@libs/client/useUser";
 const Home: NextPage = () => {
-  const user = useUser();
+  const { user, isLoading } = useUser();
   console.log(user);
   return (
     <Layout title="Home" hasTabBar>
