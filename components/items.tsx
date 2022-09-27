@@ -1,13 +1,12 @@
 interface ItemsProps {
   title: string;
-  option: string;
   price: number;
   heart: number;
   comment: number;
   id: number;
 }
 import Link from "next/link";
-export default function Items({ title, id, option, price, heart, comment }: ItemsProps) {
+export default function Items({ title, id, price, heart, comment }: ItemsProps) {
   return (
     <Link href={`/products/${id}`}>
       <a className="flex cursor-pointer justify-between px-4 pt-4">
@@ -15,7 +14,6 @@ export default function Items({ title, id, option, price, heart, comment }: Item
           <div className="h-20 w-20 rounded-md bg-gray-400" />
           <div className="flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-            <span className="text-xs text-gray-500">{option}</span>
             <span className="text-gray-9000 mt-1 font-bold">${price}</span>
           </div>
         </div>
