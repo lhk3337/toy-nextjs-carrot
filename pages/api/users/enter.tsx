@@ -47,7 +47,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   });
 }
 
-export default withHandler({ methods: "POST", handler });
+export default withHandler({ methods: "POST", handler, isPrivate: false });
 
 /* connect
 const user = phone ? { phone: +phone } : { email };
