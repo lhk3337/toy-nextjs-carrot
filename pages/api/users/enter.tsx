@@ -32,15 +32,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   });
 
   if (phone) {
-    const message = await twilioClient.messages.create({
-      to: PHONE_NUMBER!,
-      body: `캐럿마켓 인증번호는 ${payload} 입니다.`,
-      messagingServiceSid: TWILIO_MSID,
-    });
-
-    console.log(message);
+    // const message = await twilioClient.messages.create({
+    //   to: PHONE_NUMBER!,
+    //   body: `캐럿마켓 인증번호는 ${payload} 입니다.`,
+    //   messagingServiceSid: TWILIO_MSID,
+    // });
+    // console.log(message);
   } else if (email) {
-    sendEmail(email, payload);
+    // sendEmail(email, payload);
   }
 
   return res.json({

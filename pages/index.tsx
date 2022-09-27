@@ -14,7 +14,7 @@ const Home: NextPage = () => {
           .map((_, i) => (
             <Items key={i} id={i} title="New iPhone 14" option="Black" price={95} heart={1} comment={1} />
           ))}
-        <FixedButton type="add" href="/items/upload" />
+        <FixedButton type="add" href="/products/upload" />
       </div>
     </Layout>
   );
