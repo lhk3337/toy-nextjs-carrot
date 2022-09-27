@@ -3,16 +3,16 @@ export interface ResponseType {
   ok: boolean;
   [key: string]: any;
 }
-
+type method = "GET" | "POST" | "DELETE";
 interface ConfigType {
-  methods: "GET" | "POST" | "DELETE";
+  methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 }
 
 export default function withHandler({ methods, isPrivate = true, handler }: ConfigType) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== methods) {
+    if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
     if (isPrivate && !req.session.user?.id) {
