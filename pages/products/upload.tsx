@@ -1,22 +1,37 @@
 import type { NextPage } from "next";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { Product } from "@prisma/client";
+
 import Input from "@components/input";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import Button from "@components/button";
-import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 interface uploadFormType {
   name: string;
   price: number;
   description: string;
 }
+
+interface uploadMutationType {
+  ok: boolean;
+  product: Product;
+}
 const Upload: NextPage = () => {
   const { register, handleSubmit } = useForm<uploadFormType>();
-  const [uploadProduct, { loading, data }] = useMutation("api/products");
+  const [uploadProduct, { loading, data }] = useMutation<uploadMutationType>("/api/products");
   const onValid = (data: uploadFormType) => {
     if (loading) return;
     uploadProduct(data);
   };
+  const router = useRouter();
+  useEffect(() => {
+    if (data?.ok) {
+      router.push(`/products/${data.product.id}`);
+    }
+  }, [data, router]);
   return (
     <Layout canGoBack title="Upload">
       <form className="space-y-5 px-4 py-10" onSubmit={handleSubmit(onValid)}>
