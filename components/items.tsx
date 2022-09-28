@@ -14,7 +14,7 @@ export default function Items({ title, id, price, heart, comment }: ItemsProps) 
           <div className="h-20 w-20 rounded-md bg-gray-400" />
           <div className="flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-            <span className="text-gray-9000 mt-1 font-bold">${price}</span>
+            <span className="text-gray-9000 mt-1 font-bold">{price.toLocaleString("ko-KR")}원</span>
           </div>
         </div>
         <div className="flex items-end justify-end space-x-3">

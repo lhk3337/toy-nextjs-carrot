@@ -44,7 +44,7 @@ export default function Input({ name, label, kind = "text", register, placeholde
         {kind === "price" ? (
           <div className="relative flex items-center rounded-md shadow-sm">
             <div className="items-cetner pointer-events-none absolute left-0 flex justify-center pl-3">
-              <span className="text-sm text-gray-500">$</span>
+              <span className="text-sm text-gray-500">￦</span>
             </div>
             <input
               id={name}
