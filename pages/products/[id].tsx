@@ -1,8 +1,13 @@
 import type { NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
-
+import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 const ItemDetail: NextPage = () => {
+  const router = useRouter();
+
+  const { data } = useSWR(router.query.id ? `/api/products/${router.query.id}` : null);
   return (
     <Layout canGoBack>
       <div className="py-10 px-4">
@@ -11,20 +16,16 @@ const ItemDetail: NextPage = () => {
           <div className="flex cursor-pointer items-center space-x-3 border-b py-3">
             <div className="h-10 w-10 rounded-full bg-slate-300" />
             <div>
-              <p className="text-sm">Steve Jebs</p>
-              <p className="text-xs text-gray-500">View profile &rarr;</p>
+              <p className="text-sm">{data?.product?.user?.name}</p>
+              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+                <a className="text-xs text-gray-500">View profile &rarr;</a>
+              </Link>
             </div>
           </div>
           <div className="mt-5">
-            <h1 className="text-3xl font-bold">Galaxy S50</h1>
-            <p className="mt-1 text-2xl">$140</p>
-            <p className="my-2">
-              My money&apos;s in that office, right? If she start giving me some bullshit about it ain&apos;t there, and
-              we got to go someplace else and get it, I&apos;m gonna shoot you in the head then and there. Then I&apos;m
-              gonna shoot that bitch in the kneecaps, find out where my goddamn money is. She gonna tell me too. Hey,
-              look at me when I&apos;m talking to you, motherfucker. You listen: we go in there, and that ni**a Winston
-              or anybody else is in there, you the first motherfucker to get shot. You understand?
-            </p>
+            <h1 className="text-3xl font-bold">{data?.product?.name}</h1>
+            <p className="mt-3 text-2xl">{data?.product?.price.toLocaleString("ko-KR")}원</p>
+            <p className="my-6">{data?.product?.description}</p>
             <div className="my-4 flex items-center justify-between space-x-2 ">
               <Button large text="Talk to seller" />
               <button className=" rounded-md p-2 text-gray-400 hover:bg-gray-200 hover:text-gray-500 hover:focus:outline-none hover:focus:ring-2 hover:focus:ring-gray-300 hover:focus:ring-offset-2">
