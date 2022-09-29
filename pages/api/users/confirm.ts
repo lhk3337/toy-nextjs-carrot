@@ -13,7 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       payload: token,
     },
   });
-  if (!foundToken) return res.status(404);
+  if (!foundToken) return res.status(404).json({ ok: false, error: "잘못된 토큰 입니다." });
 
   req.session.user = {
     id: foundToken.userId,

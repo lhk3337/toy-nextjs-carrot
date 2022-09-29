@@ -17,6 +17,7 @@ interface TokenForm {
 
 interface MutationResult {
   ok: boolean;
+  error: String;
 }
 
 export default function Enter() {
@@ -54,6 +55,8 @@ export default function Enter() {
   useEffect(() => {
     if (tokenData?.ok) {
       router.push("/");
+    } else if (!tokenData?.ok && tokenData?.error) {
+      alert(tokenData?.error);
     }
   }, [tokenData, router]);
 
