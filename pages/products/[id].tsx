@@ -15,7 +15,7 @@ interface ItemDetailResponse {
   relatedProducts: Product[];
 }
 
-const ItemDetail: NextPage = () => {
+const ProductDetail: NextPage = () => {
   const router = useRouter();
 
   const { data } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
@@ -78,4 +78,4 @@ const ItemDetail: NextPage = () => {
   );
 };
 
-export default ItemDetail;
+export default ProductDetail;
