@@ -24,9 +24,11 @@ interface ItemDetailResponse {
 const ProductDetail: NextPage = () => {
   const router = useRouter();
 
-  const { data } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  const { data, mutate } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
   const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
+    if (!data) return;
+    mutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFev({});
   };
   return (
