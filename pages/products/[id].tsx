@@ -8,6 +8,8 @@ import { Product, User } from "@prisma/client";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import useMutation from "@libs/client/useMutation";
+import { cls } from "@libs/client/utils";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -15,6 +17,7 @@ interface ProductWithUser extends Product {
 interface ItemDetailResponse {
   ok: boolean;
   product: ProductWithUser;
+  isLiked: boolean;
   relatedProducts: Product[];
 }
 
@@ -22,6 +25,10 @@ const ProductDetail: NextPage = () => {
   const router = useRouter();
 
   const { data } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
+  const onFavClick = () => {
+    toggleFev({});
+  };
   return (
     <Layout canGoBack>
       <div className="py-10 px-4">
@@ -50,11 +57,19 @@ const ProductDetail: NextPage = () => {
                 <p className="my-6">{data?.product?.description}</p>
                 <div className="my-4 flex items-center justify-between space-x-2 ">
                   <Button large text="Talk to seller" />
-                  <button className=" rounded-md p-2 text-gray-400 hover:bg-gray-200 hover:text-gray-500 hover:focus:outline-none hover:focus:ring-2 hover:focus:ring-gray-300 hover:focus:ring-offset-2">
+                  <button
+                    onClick={onFavClick}
+                    className={cls(
+                      "rounded-md p-2 text-gray-400 hover:bg-gray-200 hover:text-gray-500 hover:focus:outline-none hover:focus:ring-2 hover:focus:ring-gray-300 hover:focus:ring-offset-2",
+                      data.isLiked
+                        ? "text-[red] hover:bg-red-200 hover:text-[red] hover:focus:ring-red-500"
+                        : "text-gray-400 hover:text-gray-400"
+                    )}
+                  >
                     <svg
                       className="h-5 w-5"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
+                      fill={data.isLiked ? "red" : "none"}
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       aria-hidden="true"
