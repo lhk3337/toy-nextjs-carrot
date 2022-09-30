@@ -3,7 +3,7 @@ import Button from "@components/button";
 import Layout from "@components/layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { Product, User } from "@prisma/client";
 
 import Skeleton from "react-loading-skeleton";
@@ -23,13 +23,18 @@ interface ItemDetailResponse {
 
 const ProductDetail: NextPage = () => {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
-  const { data, mutate } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
+  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
+    router.query.id ? `/api/products/${router.query.id}` : null
+  );
+
   const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
     if (!data) return;
-    mutate({ ...data, isLiked: !data.isLiked }, false);
-    toggleFev({});
+    boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
+    // mutate("/api/users/me", (prev: any) => prev && { ok: !prev.ok }, false);
+    toggleFev({}); // fav model에 레코드가 있으면 삭제 없으면 생성
   };
   return (
     <Layout canGoBack>
