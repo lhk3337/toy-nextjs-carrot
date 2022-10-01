@@ -4,9 +4,10 @@ interface TextAreaProps {
   name?: string;
   register: UseFormRegisterReturn;
   rows?: number;
+  placeholder?: string;
   required: boolean;
 }
-export default function TextArea({ label, name, register, rows, required }: TextAreaProps) {
+export default function TextArea({ label, name, register, rows, required, placeholder }: TextAreaProps) {
   return (
     <>
       {label ? (
@@ -19,6 +20,7 @@ export default function TextArea({ label, name, register, rows, required }: Text
         rows={rows}
         {...register}
         required={required}
+        placeholder={placeholder}
         className="bordr-gray-300 mt-1 w-full rounded-md shadow-sm focus:border-orange-500  focus:ring-orange-500"
       />
     </>
