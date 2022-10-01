@@ -1,13 +1,47 @@
 import type { NextPage } from "next";
+import { useEffect } from "react";
 import Button from "@components/button";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
+import { useForm } from "react-hook-form";
+import useMutation from "@libs/client/useMutation";
+import { Post } from "@prisma/client";
+import { useRouter } from "next/router";
+
+interface WriteForm {
+  question: string;
+}
+
+interface WritePost {
+  ok: boolean;
+  post: Post;
+}
+
 const Write: NextPage = () => {
+  const { register, handleSubmit, reset } = useForm<WriteForm>();
+  const router = useRouter();
+  const [post, { loading, data }] = useMutation<WritePost>("/api/posts");
+  console.log(data);
+  const onValid = (data: WriteForm) => {
+    if (loading) return;
+    post(data);
+    reset();
+  };
+  useEffect(() => {
+    if (data?.ok) {
+      router.push(`/community/${data.post.id}`);
+    }
+  }, [data, router]);
   return (
     <Layout canGoBack title="Write Post">
-      <form className="space-y-4 px-4 py-6">
-        <TextArea rows={8} placeholder="Answer this question!" />
-        <Button text="Submit" />
+      <form onSubmit={handleSubmit(onValid)} className="space-y-4 px-4 py-6">
+        <TextArea
+          register={register("question", { required: true, minLength: 5 })}
+          rows={8}
+          placeholder="Answer this question!"
+          required
+        />
+        <Button text={loading ? "Loading..." : "Submit"} />
       </form>
     </Layout>
   );
