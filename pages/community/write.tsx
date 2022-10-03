@@ -21,7 +21,7 @@ const Write: NextPage = () => {
   const { register, handleSubmit, reset } = useForm<WriteForm>();
   const router = useRouter();
   const [post, { loading, data }] = useMutation<WritePost>("/api/posts");
-  console.log(data);
+
   const onValid = (data: WriteForm) => {
     if (loading) return;
     post(data);
