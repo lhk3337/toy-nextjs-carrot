@@ -6,6 +6,7 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const {
     query: { id },
+    session: { user },
   } = req;
   const post = await client.post.findUnique({
     where: {
@@ -23,7 +24,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       _count: { select: { answers: true, wonderings: true } },
     },
   });
-  res.json({ ok: true, post });
+  const isWondering = Boolean(
+    await client.wondering.findFirst({
+      where: {
+        postId: Number(id),
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+  res.json({ ok: true, post, isWondering });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
