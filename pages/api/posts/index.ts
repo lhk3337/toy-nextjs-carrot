@@ -5,11 +5,13 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const {
-    body: { question },
+    body: { question, latitude, longitude },
     session: { user },
   } = req;
   if (req.method === "POST") {
-    const post = await client.post.create({ data: { question, user: { connect: { id: user?.id } } } });
+    const post = await client.post.create({
+      data: { question, latitude, longitude, user: { connect: { id: user?.id } } },
+    });
     res.json({ ok: true, post });
   }
   if (req.method === "GET") {

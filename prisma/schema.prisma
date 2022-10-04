@@ -63,6 +63,8 @@ model Fav {
 model Post {
   id         Int         @id @default(autoincrement())
   question   String      @db.MediumText
+  latitude   Float?
+  longitude  Float?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   userId     Int
