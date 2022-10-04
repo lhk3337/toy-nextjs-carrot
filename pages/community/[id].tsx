@@ -76,8 +76,9 @@ const CommunityPostDetail: NextPage = () => {
   useEffect(() => {
     if (answerData && answerData.ok) {
       reset();
+      mutate();
     }
-  }, [answerData, reset]);
+  }, [answerData, reset, mutate]);
   return (
     <Layout canGoBack>
       <div className="py-4">
@@ -139,16 +140,19 @@ const CommunityPostDetail: NextPage = () => {
           </div>
         </div>
         <div className="my-5 space-y-5 px-4">
-          {data?.post.answers.map((answer) => (
-            <div key={answer.id} className="flex items-start space-x-3">
-              <div className="h-8 w-8 rounded-full bg-slate-200" />
-              <div>
-                <span className="block text-sm font-medium text-gray-700">{answer?.user?.name}</span>
-                <span className="block text-xs text-gray-500">{answer?.createdAt?.toString()}</span>
-                <p className="mt-2 text-gray-700 ">{answer.answer}</p>
+          {data?.post.answers.map((answer) => {
+            console.log(answer);
+            return (
+              <div key={answer.id} className="flex items-start space-x-3">
+                <div className="h-8 w-8 rounded-full bg-slate-200" />
+                <div>
+                  <span className="block text-sm font-medium text-gray-700">{answer?.user?.name}</span>
+                  <span className="block text-xs text-gray-500">{String(answer.createdAt)}</span>
+                  <p className="mt-2 text-gray-700 ">{answer.answer}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <form className="space-y-4 px-4" onSubmit={handleSubmit(onValid)}>
