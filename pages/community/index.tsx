@@ -4,6 +4,7 @@ import FixedButton from "@components/fixedCircleBtn";
 import Layout from "@components/layout";
 import useSWR from "swr";
 import { Post, User } from "@prisma/client";
+import useCoords from "@libs/client/useCoords";
 
 interface PostwithUser extends Post {
   user: User;
@@ -19,8 +20,10 @@ interface PostResponse {
 }
 
 const Community: NextPage = () => {
-  const { data } = useSWR<PostResponse>("/api/posts");
-  console.log(data?.posts.map((post) => post));
+  const { latitude, longitude } = useCoords();
+  const { data } = useSWR<PostResponse>(
+    latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
+  );
   return (
     <Layout title="DN Life" hasTabBar>
       <div className="space-y-4 divide-y-[1px]">
