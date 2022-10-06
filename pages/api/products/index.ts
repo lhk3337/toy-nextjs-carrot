@@ -5,14 +5,21 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   if (req.method === "GET") {
-    const products = await client.product.findMany({
+    const productquerys = await client.product.findMany({
       include: {
         _count: {
           select: {
-            favs: true,
+            records: {
+              where: {
+                kind: { equals: "Fav" },
+              },
+            },
           },
         },
       },
+    });
+    const products = productquerys.map((product) => {
+      return { ...product, _count: { favs: product._count.records } };
     });
     res.json({ ok: true, products });
   }

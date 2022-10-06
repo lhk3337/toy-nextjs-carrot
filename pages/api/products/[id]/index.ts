@@ -28,10 +28,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     },
   });
   const isLiked = Boolean(
-    await client.fav.findFirst({
+    await client.record.findFirst({
       where: {
         productId: Number(id),
         userId: user?.id,
+        kind: "Fav",
       },
       select: {
         id: true,
