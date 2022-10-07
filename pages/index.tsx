@@ -8,7 +8,7 @@ import { Product } from "@prisma/client";
 
 interface ProductWithCount extends Product {
   _count: {
-    favs: number;
+    liked: number;
   };
 }
 interface ProductResponse {
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
             id={product.id}
             title={product.name}
             price={product.price}
-            heart={product._count.favs}
+            heart={product._count.liked}
             comment={1}
           />
         ))}

@@ -19,7 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
     });
     const products = productquerys.map((product) => {
-      return { ...product, _count: { favs: product._count.records } };
+      return { ...product, _count: { liked: product._count.records } };
     });
     res.json({ ok: true, products });
   }
