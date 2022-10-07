@@ -10,22 +10,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     query: { kind },
   } = req;
 
-  const KindValue = (kind: string) => {
-    if (kind === "fav") return "Fav";
-    if (kind === "purchase") return "Purchase";
-    if (kind === "sale") return "Sale";
-  };
-
-  const records = await client.record.findMany({
+  const recordsQuerys = await client.record.findMany({
     where: {
       userId: user?.id,
-      kind: KindValue(kind as Kind),
+      kind: kind as Kind,
     },
     include: {
-      product: true,
+      product: {
+        include: {
+          _count: {
+            select: {
+              records: {
+                where: {
+                  kind: { equals: "Fav" },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
-  res.json({ ok: true, [kind as string]: records });
+  const products = recordsQuerys?.map((product) => {
+    return { ...product, product: { ...product.product, _count: { liked: product.product._count.records } } };
+  });
+  //_count: {records : 1} 로 출력하여 records를 liked로 바꾸기 위해 products를 사용함
+
+  res.json({ ok: true, [kind as string]: products });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
