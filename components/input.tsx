@@ -21,6 +21,7 @@ export default function Input({ name, label, kind = "text", register, placeholde
             <input
               {...register}
               required={required}
+              placeholder={placeholder}
               type={type}
               id={name}
               className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
@@ -35,6 +36,7 @@ export default function Input({ name, label, kind = "text", register, placeholde
             <input
               {...register}
               required={required}
+              placeholder={placeholder}
               type={type}
               id={name}
               className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
