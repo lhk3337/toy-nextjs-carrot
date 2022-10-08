@@ -1,11 +1,14 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import useSWR from "swr";
 
-export default function useUser() {
-  const { data, error } = useSWR("/api/users/me");
+export default function useUser(pathname: string) {
   const router = useRouter();
+
+  const { data, error } = useSWR(pathname === "/enter" ? null : "/api/users/me", (url: string) =>
+    fetch(url).then((res) => res.json())
+  );
 
   useEffect(() => {
     if (data && !data.ok) {
