@@ -21,9 +21,8 @@ export default function useMutation<T = any>(url: string): UseMutationResult<T> 
       body: JSON.stringify(data),
     })
       .then((response) => response.json().catch(() => {}))
-      .then((json) => setState((prevState) => ({ ...prevState, data: json })))
-      .catch((error) => setState((prevState) => ({ ...prevState, error })))
-      .finally(() => setState((prevState) => ({ ...prevState, loading: false })));
+      .then((data) => setState((prevState) => ({ ...prevState, data, loading: false })))
+      .catch((error) => setState((prevState) => ({ ...prevState, error })));
   }
   // enter.tsx line 30 - enter(validForm);
   return [mutation, { ...state }];
