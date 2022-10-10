@@ -1,21 +1,25 @@
 import type { NextPage } from "next";
 import Layout from "@components/layout";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import { Stream } from "@prisma/client";
+
+interface StreamResponse {
+  ok: true;
+  stream: Stream;
+}
 
 const LiveDetail: NextPage = () => {
+  const router = useRouter();
+  const { data } = useSWR<StreamResponse>(router.query.id ? `/api/streams/${router.query.id}` : null);
   return (
     <Layout canGoBack>
       <div className="space-y-5 py-10 px-4">
         <div className="aspect-video w-full rounded-md bg-slate-300" />
         <div className="mt-5">
-          <h1 className="text-3xl font-bold">Galaxy S50</h1>
-          <p className="mt-1 text-2xl">$140</p>
-          <p className="my-2">
-            My money&apos;s in that office, right? If she start giving me some bullshit about it ain&apos;t there, and
-            we got to go someplace else and get it, I&apos;m gonna shoot you in the head then and there. Then I&apos;m
-            gonna shoot that bitch in the kneecaps, find out where my goddamn money is. She gonna tell me too. Hey, look
-            at me when I&apos;m talking to you, motherfucker. You listen: we go in there, and that ni**a Winston or
-            anybody else is in there, you the first motherfucker to get shot. You understand?
-          </p>
+          <h1 className="text-3xl font-bold">{data?.stream?.name}</h1>
+          <p className="mt-1 text-2xl">{data?.stream?.price.toLocaleString("ko-KR")}원</p>
+          <p className="my-6 font-normal text-slate-700">{data?.stream?.description}</p>
         </div>
         <div className="h-[50vh] space-y-6 overflow-y-scroll px-4 py-10  pb-14 scrollbar-hide">
           {Array(8)
