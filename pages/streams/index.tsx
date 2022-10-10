@@ -9,14 +9,14 @@ const Live: NextPage = () => {
         {Array(5)
           .fill("")
           .map((_, i) => (
-            <Link key={i} href={`/lives/${i}`}>
+            <Link key={i} href={`/streams/${i}`}>
               <a className="px-4 pt-4">
                 <div className="aspect-video w-full rounded-md bg-slate-300" />
                 <h1 className="mt-2 text-2xl font-bold text-gray-700">Galaxy S50</h1>
               </a>
             </Link>
           ))}
-        <FixedButton type="video" href="/lives/create" />
+        <FixedButton type="video" href="/streams/create" />
       </div>
     </Layout>
   );

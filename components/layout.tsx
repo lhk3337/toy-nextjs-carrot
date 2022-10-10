@@ -98,7 +98,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
               <span>Chat</span>
             </a>
           </Link>
-          <Link href="/lives">
+          <Link href="/streams">
             <a className="flex flex-col items-center space-y-2">
               <svg
                 className="h-6 w-6"
