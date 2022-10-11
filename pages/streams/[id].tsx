@@ -3,6 +3,7 @@ import Layout from "@components/layout";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { Stream } from "@prisma/client";
+import Message from "@components/message";
 
 interface StreamResponse {
   ok: true;
@@ -22,30 +23,9 @@ const LiveDetail: NextPage = () => {
           <p className="my-6 font-normal text-slate-700">{data?.stream?.description}</p>
         </div>
         <div className="h-[50vh] space-y-6 overflow-y-scroll px-4 py-10  pb-14 scrollbar-hide">
-          {Array(8)
-            .fill("")
-            .map((_, i) => (
-              <>
-                <div className="flex-start flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-slate-300" />
-                  <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                    <p>Hi how much are you selling them for?</p>
-                  </div>
-                </div>
-                <div className="flex-start flex flex-row-reverse items-center space-x-2 space-x-reverse">
-                  <div className="h-8 w-8 rounded-full bg-slate-300" />
-                  <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                    <p>I want ￦20,000</p>
-                  </div>
-                </div>
-                <div className="flex-start flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-slate-300" />
-                  <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                    <p>미쳤어</p>
-                  </div>
-                </div>
-              </>
-            ))}
+          <Message message="Hi how much are you selling them for?" />
+          <Message message="I want ￦20,000" reversed />
+          <Message message="미쳤어" />
         </div>
         <div className="fixed inset-x-0 bottom-3 mx-auto mt-2 w-full max-w-md">
           <div className="relative flex items-center">
