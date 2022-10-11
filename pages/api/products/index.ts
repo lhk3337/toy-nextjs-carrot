@@ -32,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     const product = await client.product.create({
       data: {
         name,
-        price: +price,
+        price,
         description,
         imageUrl: "nice",
         user: { connect: { id: user?.id } },
