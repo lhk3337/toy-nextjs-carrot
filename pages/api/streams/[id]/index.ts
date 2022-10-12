@@ -12,6 +12,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     where: {
       id: Number(id),
     },
+    include: {
+      messages: {
+        select: {
+          message: true,
+          id: true,
+          user: {
+            select: {
+              avartar: true,
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!stream) {
     res.json({ ok: false, message: "Not Founded" });
