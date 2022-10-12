@@ -4,6 +4,9 @@ import FixedButton from "@components/fixedCircleBtn";
 import Link from "next/link";
 import { Stream } from "@prisma/client";
 import useSWR from "swr";
+import { useState } from "react";
+import { cls } from "@libs/client/utils";
+import { useRouter } from "next/router";
 
 interface StreamsResponse {
   ok: boolean;
@@ -11,18 +14,42 @@ interface StreamsResponse {
 }
 
 const Streams: NextPage = () => {
-  const { data } = useSWR<StreamsResponse>("/api/streams");
+  const [page, setPage] = useState(1);
+  const onClick = (value: number) => {
+    setPage(value);
+  };
+  const { data } = useSWR<StreamsResponse>(`/api/streams?page=${page}`);
+  const router = useRouter();
   return (
     <Layout title="Live" hasTabBar>
       <div className="space-y-4 divide-y-[1px]">
         {data?.streams.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>
-            <a className="px-4 pt-4">
+            <a className="block px-2 pt-8">
               <div className="aspect-video w-full rounded-md bg-slate-300" />
               <h1 className="mt-2 text-2xl font-bold text-gray-700">{stream.name}</h1>
             </a>
           </Link>
         ))}
+        <div className="flex justify-around">
+          {Array.from(Array(data?.streams.length).keys()).map((value, i) => {
+            const page = value + 1;
+            return (
+              <Link href={`/streams?page=${page}`} key={i}>
+                <a
+                  className={cls(
+                    "cursor-pointer py-6",
+                    router.query.page === String(page) ? "font-bold text-red-500" : ""
+                  )}
+                  onClick={() => onClick(page)}
+                >
+                  {page}
+                </a>
+              </Link>
+            );
+          })}
+        </div>
+
         <FixedButton type="video" href="/streams/create" />
       </div>
     </Layout>
