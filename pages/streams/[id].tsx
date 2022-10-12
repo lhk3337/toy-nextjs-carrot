@@ -7,7 +7,7 @@ import Message from "@components/message";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface StreamResponse {
   ok: true;
@@ -47,18 +47,25 @@ const StreamDetail: NextPage = () => {
       mutate();
     }
   }, [sendMessageData, mutate]);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  });
   return (
     <Layout canGoBack>
-      <div className="space-y-5 py-10 px-4">
+      <div className="space-y-5 py-6 px-4 pb-10">
         <div className="aspect-video w-full rounded-md bg-slate-300" />
         <div className="mt-5">
           <h1 className="text-3xl font-bold">{data?.stream?.name}</h1>
           <p className="mt-1 text-2xl">{data?.stream?.price.toLocaleString("ko-KR")}원</p>
           <p className="my-6 font-normal text-slate-700">{data?.stream?.description}</p>
         </div>
-        <div className="h-[50vh] space-y-6 overflow-y-scroll px-4 py-10  pb-14 scrollbar-hide">
+        <div className="h-[40vh] space-y-4 overflow-y-scroll px-4 py-8 scrollbar-hide">
           {data?.stream.messages.map((message) => (
-            <Message key={message.id} message={message.message} reversed={message.user.id === user?.id} />
+            <div key={message.id} ref={scrollRef}>
+              <Message message={message.message} reversed={message.user.id === user?.id} />
+            </div>
           ))}
         </div>
         <div className="fixed inset-x-0 bottom-3 mx-auto mt-2 w-full max-w-md">
