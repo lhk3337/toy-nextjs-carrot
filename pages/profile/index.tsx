@@ -5,6 +5,10 @@ import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { Review, User } from "@prisma/client";
 import { cls } from "@libs/client/utils";
+import Button from "@components/button";
+import useMutation from "@libs/client/useMutation";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -15,20 +19,40 @@ interface ReviewResponse {
   reviews: ReviewWithUser[];
 }
 
+interface logoutMutationType {
+  ok: boolean;
+}
+
 const Profile: NextPage = () => {
   const { user } = useUser();
   const { data } = useSWR<ReviewResponse>("/api/reviews");
+  const [logout, { loading, data: logoutData }] = useMutation<logoutMutationType>("/api/users/logout");
+  const router = useRouter();
+  const onLogoutClick = () => {
+    if (!loading) {
+      console.log(logoutData);
+      logout({});
+    }
+  };
+  useEffect(() => {
+    if (logoutData?.ok) {
+      router.push("/");
+    }
+  }, [logoutData, router]);
   return (
     <Layout title="User" hasTabBar>
       <div className="px-4">
-        <div className="mt-4 flex items-center space-x-3">
-          <div className="h-16 w-16 rounded-full bg-slate-500" />
-          <div className="flex flex-col">
-            <span className="font-medium text-gray-900">{user?.name}</span>
-            <Link href="/profile/edit">
-              <a className="text-sm font-medium text-gray-500">Edit profile &rarr;</a>
-            </Link>
+        <div className="flex items-center justify-between px-4 pt-4">
+          <div className="mt-4 flex items-center space-x-3">
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-900">{user?.name}</span>
+              <Link href="/profile/edit">
+                <a className="text-sm font-medium text-gray-500">Edit profile &rarr;</a>
+              </Link>
+            </div>
           </div>
+          <Button text="Logout" small onClick={onLogoutClick} />
         </div>
         <div className="mt-10 flex justify-around">
           <Link href="/profile/sold">
