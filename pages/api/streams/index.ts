@@ -20,6 +20,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     });
     res.json({ ok: true, stream });
   } else if (req.method === "GET") {
+    const allStreamList = await client.stream.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    });
+
+    const streamCount = Math.ceil(allStreamList.length / 10);
+
     const streams = await client.stream.findMany({
       take: 10,
       skip: (Number(page) - 1) * 10,
@@ -27,7 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         id: "asc",
       },
     });
-    res.json({ ok: true, streams });
+    res.json({ ok: true, streams, streamCount });
   }
 }
 

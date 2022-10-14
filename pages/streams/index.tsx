@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 interface StreamsResponse {
   ok: boolean;
   streams: Stream[];
+  streamCount: Number;
 }
 
 const Streams: NextPage = () => {
@@ -31,26 +32,26 @@ const Streams: NextPage = () => {
             </a>
           </Link>
         ))}
-        <div className="flex justify-around">
-          {Array.from(Array(data?.streams.length).keys()).map((value, i) => {
+
+        <FixedButton type="video" href="/streams/create" />
+        <div className="grid w-full grid-cols-10 ">
+          {Array.from(Array(data?.streamCount).keys()).map((value, i) => {
             const page = value + 1;
             return (
               <Link href={`/streams?page=${page}`} key={i}>
                 <a
                   className={cls(
-                    "cursor-pointer py-6",
+                    "block cursor-pointer py-2 text-center",
                     router.query.page === String(page) ? "font-bold text-red-500" : ""
                   )}
                   onClick={() => onClick(page)}
                 >
-                  {page}
+                  {`${page}`}
                 </a>
               </Link>
             );
           })}
         </div>
-
-        <FixedButton type="video" href="/streams/create" />
       </div>
     </Layout>
   );
