@@ -30,13 +30,12 @@ const Profile: NextPage = () => {
   const router = useRouter();
   const onLogoutClick = () => {
     if (!loading) {
-      console.log(logoutData);
       logout({});
     }
   };
   useEffect(() => {
     if (logoutData?.ok) {
-      router.push("/");
+      router.push("/enter");
     }
   }, [logoutData, router]);
   return (
