@@ -3,28 +3,39 @@ import Layout from "@components/layout";
 import FixedButton from "@components/fixedCircleBtn";
 import Link from "next/link";
 import { Stream } from "@prisma/client";
-import useSWR from "swr";
-import { useState } from "react";
-import { cls } from "@libs/client/utils";
-import { useRouter } from "next/router";
 
-import Skeleton from "react-loading-skeleton";
+import useSWRInfinite from "swr/infinite";
+import { useEffect } from "react";
+
 import { useInfiniteScroll } from "@libs/client/useInfinite";
 
 interface StreamsResponse {
   ok: boolean;
   streams: Stream[];
-  streamCount: Number;
+  streamCount: number;
 }
 
+const getKey = (pageIndex: number, previousPageData: StreamsResponse) => {
+  if (pageIndex === 0) return `/api/streams?page=1`;
+  if (pageIndex + 1 > previousPageData.streamCount) return null;
+  return `/api/streams?page=${pageIndex + 1}`;
+};
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const Streams: NextPage = () => {
-  const [page, setPage] = useState(1);
-  const onClick = (value: number) => {
-    setPage(value);
-  };
-  const { data } = useSWR<StreamsResponse>(`/api/streams?page=${page}`);
-  const router = useRouter();
-  const scroll = useInfiniteScroll();
+  const page = useInfiniteScroll();
+
+  const { data, setSize } = useSWRInfinite<StreamsResponse>(getKey, fetcher);
+  useEffect(() => {
+    setSize(page);
+  }, [setSize, page]);
+
+  const streams = data
+    ?.map((value) => value.streams)
+    .reduce(function (acc, cur) {
+      return acc.concat(cur);
+    });
 
   return (
     <Layout title="Live" hasTabBar>
@@ -36,7 +47,7 @@ const Streams: NextPage = () => {
         </>
       ) : (
         <div className="space-y-4 divide-y-[1px]">
-          {data?.streams.map((stream) => (
+          {streams?.map((stream) => (
             <Link key={stream.id} href={`/streams/${stream.id}`}>
               <a className="block px-2 pt-8">
                 <div className="aspect-video w-full rounded-md bg-slate-300" />
@@ -45,24 +56,6 @@ const Streams: NextPage = () => {
             </Link>
           ))}
           <FixedButton type="video" href="/streams/create" />
-          <div className="grid w-full grid-cols-10 ">
-            {Array.from(Array(data?.streamCount).keys()).map((value, i) => {
-              const page = value + 1;
-              return (
-                <Link href={`/streams?page=${page}`} key={i}>
-                  <a
-                    className={cls(
-                      "block cursor-pointer py-2 text-center",
-                      router.query.page === String(page) ? "font-bold text-red-500" : ""
-                    )}
-                    onClick={() => onClick(page)}
-                  >
-                    {`${page}`}
-                  </a>
-                </Link>
-              );
-            })}
-          </div>
         </div>
       )}
     </Layout>
