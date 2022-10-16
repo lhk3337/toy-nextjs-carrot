@@ -54,7 +54,7 @@ export default function Enter() {
   const router = useRouter();
   useEffect(() => {
     if (tokenData?.ok) {
-      router.push("/");
+      router.replace("/");
     } else if (!tokenData?.ok && tokenData?.error) {
       alert(tokenData?.error);
     }
