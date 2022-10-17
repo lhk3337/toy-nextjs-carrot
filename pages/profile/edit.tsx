@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-
+import firebase from "@libs/server/firebase";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 interface EditProfileForm {
   email?: string;
   phone?: string;
@@ -23,7 +24,7 @@ interface EditProfileResponse {
 
 const Edit: NextPage = () => {
   const { user } = useUser();
-
+  const [avatarPreview, setAvatarPreview] = useState("");
   const {
     register,
     setValue,
@@ -49,7 +50,27 @@ const Edit: NextPage = () => {
         message: "Email or phone number are required. Please enter one of the two.",
       });
     }
-    editProfile({ email, phone, name });
+
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+
+      const storageService = getStorage(firebase);
+      const imageRef = ref(storageService, "image" + file.text);
+      uploadBytes(imageRef, file).then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+      });
+
+      // ask firebase url
+      // upload file to firebase
+      editProfile({
+        email,
+        phone,
+        name,
+        // avatar URL
+      });
+    } else {
+      editProfile({ email, phone, name });
+    }
   };
 
   useEffect(() => {
@@ -64,14 +85,17 @@ const Edit: NextPage = () => {
       router.push(`/profile`);
     }
   }, [data, router]);
-  const [avatarPreview, setAvatarPreview] = useState("");
+
   const avatar = watch("avatar");
   useEffect(() => {
     if (avatar && avatar.length > 0) {
       const file = avatar[0];
+
       setAvatarPreview(URL.createObjectURL(file));
     }
   }, [avatar]);
+  // console.log(avatarPreview);
+  console.log(typeof avatarPreview);
   return (
     <Layout canGoBack title="Edit Profile">
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
