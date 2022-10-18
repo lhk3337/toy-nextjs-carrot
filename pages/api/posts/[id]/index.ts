@@ -18,10 +18,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           answer: true,
           id: true,
           createdAt: true,
-          user: { select: { id: true, name: true, avartar: true } },
+          user: { select: { id: true, name: true, avatar: true } },
         },
       },
-      user: { select: { id: true, name: true, avartar: true } },
+      user: { select: { id: true, name: true, avatar: true } },
       _count: { select: { answers: true, wonderings: true } },
     },
   });

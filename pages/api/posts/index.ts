@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           select: {
             id: true,
             name: true,
-            avartar: true,
+            avatar: true,
           },
         },
         _count: {

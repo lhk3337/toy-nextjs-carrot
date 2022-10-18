@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   } = req;
   const product = await client.product.findUnique({
     where: { id: Number(id) },
-    include: { user: { select: { id: true, name: true, avartar: true } } },
+    include: { user: { select: { id: true, name: true, avatar: true } } },
   });
   const terms = product?.name.split(" ").map((word) => ({
     name: {

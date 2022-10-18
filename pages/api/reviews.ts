@@ -16,7 +16,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         select: {
           name: true,
           id: true,
-          avartar: true,
+          avatar: true,
         },
       },
     },

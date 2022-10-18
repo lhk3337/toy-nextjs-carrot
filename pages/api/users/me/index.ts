@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { withApiSession } from "@libs/server/withSession";
 import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
-import { json } from "stream/consumers";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   if (req.method === "GET") {
@@ -13,7 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   if (req.method === "POST") {
     const {
       session: { user },
-      body: { email, phone, name },
+      body: { email, phone, name, avatar },
     } = req;
     const currentUser = await client.user.findUnique({
       where: {
@@ -76,6 +75,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         data: {
           name,
         },
+      });
+    }
+    if (avatar) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: { avatar },
       });
     }
     res.json({ ok: true });
