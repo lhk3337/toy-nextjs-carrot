@@ -86,7 +86,11 @@ const CommunityPostDetail: NextPage = () => {
           동네질문
         </span>
         <div className="mb-3 flex cursor-pointer items-center space-x-3 border-b  px-4 py-2">
-          <div className="h-10 w-10 rounded-full bg-slate-300" />
+          {data?.post.user.avatar ? (
+            <img className="h-10 w-10 rounded-full" src={data.post.user.avatar} />
+          ) : (
+            <div className="h-10 w-10 rounded-full bg-slate-300" />
+          )}
           <div>
             <p className="text-sm">{data?.post?.user.name}</p>
             <Link href={`/users/profiles/${data?.post?.user?.id}`}>
@@ -141,10 +145,14 @@ const CommunityPostDetail: NextPage = () => {
         </div>
         <div className="my-5 space-y-5 px-4">
           {data?.post.answers.map((answer) => {
-            console.log(answer);
             return (
               <div key={answer.id} className="flex items-start space-x-3">
-                <div className="h-8 w-8 rounded-full bg-slate-200" />
+                {answer.user.avatar ? (
+                  <img className="h-8 w-8 rounded-full" src={answer.user.avatar} />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-slate-200" />
+                )}
+
                 <div>
                   <span className="block text-sm font-medium text-gray-700">{answer?.user?.name}</span>
                   <span className="block text-xs text-gray-500">{String(answer.createdAt)}</span>

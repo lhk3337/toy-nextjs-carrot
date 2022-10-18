@@ -43,7 +43,11 @@ const Profile: NextPage = () => {
       <div className="px-4">
         <div className="flex items-center justify-between px-4 pt-4">
           <div className="mt-4 flex items-center space-x-3">
-            <div className="h-16 w-16 rounded-full bg-slate-500" />
+            {user?.avatar ? (
+              <img src={user?.avatar} className="h-16 w-16 rounded-full bg-transparent" />
+            ) : (
+              <div className="h-16 w-16 rounded-full bg-slate-500" />
+            )}
             <div className="flex flex-col">
               <span className="font-medium text-gray-900">{user?.name}</span>
               <Link href="/profile/edit">

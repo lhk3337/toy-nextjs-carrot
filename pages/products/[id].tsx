@@ -45,7 +45,11 @@ const ProductDetail: NextPage = () => {
             <Skeleton height={50} className="mt-3" />
           ) : (
             <div className="flex cursor-pointer items-center space-x-3 border-b py-3">
-              <div className="h-10 w-10 rounded-full bg-slate-300" />
+              {data.product.user.avatar ? (
+                <img className="h-10 w-10 rounded-full" src={data.product.user.avatar} />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-slate-300" />
+              )}
               <div>
                 <p className="text-sm">{data?.product?.user?.name}</p>
                 <Link href={`/users/profiles/${data?.product?.user?.id}`}>

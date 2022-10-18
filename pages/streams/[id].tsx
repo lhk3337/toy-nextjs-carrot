@@ -72,7 +72,7 @@ const StreamDetail: NextPage = () => {
         <div className="h-[40vh] space-y-4 overflow-y-scroll px-4 py-8 scrollbar-hide">
           {data?.stream.messages.map((message) => (
             <div key={message.id} ref={scrollRef}>
-              <Message message={message.message} reversed={message.user.id === user?.id} />
+              <Message message={message.message} img={message.user.avatar} reversed={message.user.id === user?.id} />
             </div>
           ))}
         </div>
