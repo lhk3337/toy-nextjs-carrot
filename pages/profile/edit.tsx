@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import firebase from "@libs/server/firebase";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 interface EditProfileForm {
   email?: string;
   phone?: string;
@@ -23,8 +23,10 @@ interface EditProfileResponse {
 }
 
 const Edit: NextPage = () => {
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
+  const [imageFile, setImageFile] = useState<FileList>();
   const [avatarPreview, setAvatarPreview] = useState("");
+  const [downloadURL, setDownloadURL] = useState<string>("");
   const {
     register,
     setValue,
@@ -51,23 +53,38 @@ const Edit: NextPage = () => {
       });
     }
 
-    if (avatar && avatar.length > 0) {
-      const file = avatar[0];
-
-      const storageService = getStorage(firebase);
-      const imageRef = ref(storageService, "image" + file.text);
-      uploadBytes(imageRef, file).then((snapshot) => {
-        console.log("Uploaded a blob or file!");
-      });
-
-      // ask firebase url
-      // upload file to firebase
-      editProfile({
-        email,
-        phone,
-        name,
-        // avatar URL
-      });
+    if (imageFile && imageFile.length > 0) {
+      if (imageFile) {
+        const storageService = getStorage(firebase);
+        const imageRef = ref(storageService, `image/${imageFile[0].name}`);
+        const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              editProfile({
+                email,
+                phone,
+                name,
+                avatar: url,
+              });
+            });
+          }
+        );
+      }
     } else {
       editProfile({ email, phone, name });
     }
@@ -86,22 +103,20 @@ const Edit: NextPage = () => {
     }
   }, [data, router]);
 
-  const avatar = watch("avatar");
+  const setAvatar = watch("avatar");
   useEffect(() => {
-    if (avatar && avatar.length > 0) {
-      const file = avatar[0];
-
-      setAvatarPreview(URL.createObjectURL(file));
+    setImageFile(setAvatar);
+    if (imageFile && imageFile.length > 0) {
+      setAvatarPreview(URL.createObjectURL(imageFile[0]));
     }
-  }, [avatar]);
-  // console.log(avatarPreview);
-  console.log(typeof avatarPreview);
+  }, [setImageFile, imageFile, watch, setAvatar]);
+
   return (
     <Layout canGoBack title="Edit Profile">
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center space-x-4">
-          {avatarPreview ? (
-            <img src={avatarPreview} className="h-14 w-14 rounded-full bg-transparent" />
+          {user?.avatar ? (
+            <img src={avatarPreview ? avatarPreview : user?.avatar} className="h-14 w-14 rounded-full bg-transparent" />
           ) : (
             <div className="h-14 w-14 rounded-full bg-slate-500" />
           )}
