@@ -56,7 +56,7 @@ const Edit: NextPage = () => {
     if (imageFile && imageFile.length > 0) {
       if (imageFile) {
         const storageService = getStorage(firebase);
-        const imageRef = ref(storageService, `image/${imageFile[0].name}`);
+        const imageRef = ref(storageService, `profile/${imageFile[0].name}`);
         const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
         uploadTask.on(
           "state_changed",
