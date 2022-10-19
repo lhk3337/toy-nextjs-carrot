@@ -23,10 +23,9 @@ interface EditProfileResponse {
 }
 
 const Edit: NextPage = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const [imageFile, setImageFile] = useState<FileList>();
   const [avatarPreview, setAvatarPreview] = useState("");
-  const [downloadURL, setDownloadURL] = useState<string>("");
   const {
     register,
     setValue,
@@ -40,6 +39,7 @@ const Edit: NextPage = () => {
     if (user?.email) setValue("email", user.email);
     if (user?.phone) setValue("phone", user.phone);
     if (user?.name) setValue("name", user.name);
+    if (user?.avatar) setAvatarPreview(user.avatar);
     // 백엔드에서 데이터 불러와 input에 출력하기
   }, [user, setValue]);
 
@@ -116,7 +116,7 @@ const Edit: NextPage = () => {
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center space-x-4">
           {user?.avatar ? (
-            <img src={avatarPreview ? avatarPreview : user?.avatar} className="h-14 w-14 rounded-full bg-transparent" />
+            <img src={avatarPreview} className="h-14 w-14 rounded-full bg-transparent" />
           ) : (
             <div className="h-14 w-14 rounded-full bg-slate-500" />
           )}
