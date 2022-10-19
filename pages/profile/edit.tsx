@@ -54,37 +54,35 @@ const Edit: NextPage = () => {
     }
 
     if (imageFile && imageFile.length > 0) {
-      if (imageFile) {
-        const storageService = getStorage(firebase);
-        const imageRef = ref(storageService, `profile/${imageFile[0].name}`);
-        const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            switch (snapshot.state) {
-              case "paused":
-                console.log("Upload is paused");
-                break;
-              case "running":
-                console.log("Upload is running");
-                break;
-            }
-          },
-          (error) => {
-            console.log(error);
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-              editProfile({
-                email,
-                phone,
-                name,
-                avatar: url,
-              });
-            });
+      const storageService = getStorage(firebase);
+      const imageRef = ref(storageService, `profile/${imageFile[0].name}`);
+      const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
           }
-        );
-      }
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            editProfile({
+              email,
+              phone,
+              name,
+              avatar: url,
+            });
+          });
+        }
+      );
     } else {
       editProfile({ email, phone, name });
     }
