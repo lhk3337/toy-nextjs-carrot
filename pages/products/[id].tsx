@@ -40,7 +40,13 @@ const ProductDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="py-10 px-4">
         <div className="mb-8">
-          {!data ? <Skeleton height={384} /> : <div className="h-96 bg-slate-300" />}
+          {!data ? (
+            <Skeleton height={384} />
+          ) : data?.product.imageUrl ? (
+            <img src={data.product.imageUrl} className="h-96 rounded-md" />
+          ) : (
+            <div className="h-96 bg-slate-300" />
+          )}
           {!data ? (
             <Skeleton height={50} className="mt-3" />
           ) : (
