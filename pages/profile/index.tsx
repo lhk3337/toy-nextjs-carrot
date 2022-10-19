@@ -126,7 +126,11 @@ const Profile: NextPage = () => {
           return (
             <div className="mt-12" key={review.id}>
               <div className="flex items-center space-x-4">
-                <div className="h-12 w-12 rounded-full bg-slate-500" />
+                {review.createdBy.avatar ? (
+                  <img className="h-12 w-12 rounded-full" src={review.createdBy.avatar} />
+                ) : (
+                  <div className="h-12 w-12 rounded-full bg-slate-500" />
+                )}
                 <div className="flex space-x-2">
                   <h4 className="text-sm font-bold text-gray-800">{review.createdBy.name}</h4>
                   <div className="flex items-center">
