@@ -12,6 +12,8 @@ import useMutation from "@libs/client/useMutation";
 
 import firebase from "@libs/server/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
+
 interface uploadFormType {
   name: string;
   price: number;
@@ -85,7 +87,14 @@ const Upload: NextPage = () => {
       <form className="space-y-5 px-4 py-10" onSubmit={handleSubmit(onValid)}>
         <div>
           {productPreview ? (
-            <img src={productPreview} className="round-md h-64  w-full text-gray-600" />
+            <div className="relative -z-10 h-64 w-full">
+              <Image
+                src={productPreview}
+                className="round-md object-contain text-gray-600"
+                layout="fill"
+                alt="uploadImage"
+              />
+            </div>
           ) : (
             <label className="flex h-64 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-orange-500 hover:text-orange-500">
               <svg className="h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">

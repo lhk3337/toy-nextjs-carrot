@@ -9,6 +9,7 @@ import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -44,7 +45,14 @@ const Profile: NextPage = () => {
         <div className="flex items-center justify-between px-4 pt-4">
           <div className="mt-4 flex items-center space-x-3">
             {user?.avatar ? (
-              <img src={user?.avatar} className="h-16 w-16 rounded-full bg-transparent" />
+              <div className="relative -z-10 h-16 w-16">
+                <Image
+                  src={user?.avatar}
+                  className="rounded-full bg-transparent object-cover"
+                  layout="fill"
+                  alt="avatar"
+                />
+              </div>
             ) : (
               <div className="h-16 w-16 rounded-full bg-slate-500" />
             )}
@@ -127,7 +135,14 @@ const Profile: NextPage = () => {
             <div className="mt-12" key={review.id}>
               <div className="flex items-center space-x-4">
                 {review.createdBy.avatar ? (
-                  <img className="h-12 w-12 rounded-full" src={review.createdBy.avatar} />
+                  <div className="relative -z-10 h-12 w-12">
+                    <Image
+                      className="rounded-full object-cover"
+                      layout="fill"
+                      src={review.createdBy.avatar}
+                      alt="avatar"
+                    />
+                  </div>
                 ) : (
                   <div className="h-12 w-12 rounded-full bg-slate-500" />
                 )}

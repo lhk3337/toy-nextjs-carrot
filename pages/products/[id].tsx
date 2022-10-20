@@ -10,6 +10,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import Image from "next/image";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -43,16 +44,25 @@ const ProductDetail: NextPage = () => {
           {!data ? (
             <Skeleton height={384} />
           ) : data?.product.imageUrl ? (
-            <img src={data.product.imageUrl} className="h-96 rounded-md" />
+            <div className="relative -z-10 pb-80">
+              <Image
+                src={data.product.imageUrl}
+                layout="fill"
+                className="rounded-sm object-contain"
+                alt="detailProductImage"
+              />
+            </div>
           ) : (
-            <div className="h-96 bg-slate-300" />
+            <div className="h-80 rounded-sm bg-slate-300" />
           )}
           {!data ? (
             <Skeleton height={50} className="mt-3" />
           ) : (
             <div className="flex cursor-pointer items-center space-x-3 border-b py-3">
               {data.product.user.avatar ? (
-                <img className="h-10 w-10 rounded-full" src={data.product.user.avatar} />
+                <div className="relative -z-10 h-10 w-10">
+                  <Image className="rounded-full" layout="fill" src={data.product.user.avatar} alt="avatar" />
+                </div>
               ) : (
                 <div className="h-10 w-10 rounded-full bg-slate-300" />
               )}

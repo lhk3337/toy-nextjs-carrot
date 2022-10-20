@@ -9,6 +9,7 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import firebase from "@libs/server/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
 interface EditProfileForm {
   email?: string;
   phone?: string;
@@ -114,7 +115,14 @@ const Edit: NextPage = () => {
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center space-x-4">
           {user?.avatar ? (
-            <img src={avatarPreview} className="h-14 w-14 rounded-full bg-transparent" />
+            <div className="relative -z-10 h-14 w-14">
+              <Image
+                src={avatarPreview}
+                layout="fill"
+                className="rounded-full bg-transparent object-cover"
+                alt="avatar"
+              />
+            </div>
           ) : (
             <div className="h-14 w-14 rounded-full bg-slate-500" />
           )}

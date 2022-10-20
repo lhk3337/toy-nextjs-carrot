@@ -1,3 +1,5 @@
+import Link from "next/link";
+import Image from "next/image";
 interface ItemsProps {
   title: string;
   price: number;
@@ -6,18 +8,19 @@ interface ItemsProps {
   id: number;
   imgurl?: string;
 }
-import Link from "next/link";
+
 export default function Items({ title, id, price, heart, comment, imgurl }: ItemsProps) {
   return (
     <Link href={`/products/${id}`}>
       <a className="flex cursor-pointer justify-between px-4 pt-4">
         <div className="flex items-center space-x-5">
           {imgurl ? (
-            <img src={imgurl} className="h-20 w-20 rounded-md " />
+            <div className="relative -z-10 h-20 w-20">
+              <Image src={imgurl} className="rounded-md" layout="fill" objectFit="cover" alt="productImg" />
+            </div>
           ) : (
             <div className="h-20 w-20 rounded-md bg-gray-400" />
           )}
-          {/* <div className="h-20 w-20 rounded-md bg-gray-400" /> */}
           <div className="flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
             <span className="text-gray-9000 mt-1 font-bold">{price.toLocaleString("ko-KR")}원</span>
