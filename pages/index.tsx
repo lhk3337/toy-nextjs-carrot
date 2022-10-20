@@ -1,5 +1,12 @@
 import type { NextPage } from "next";
+import Image from "next/image";
+import riceCake from "../public/local.jpeg";
+
 const Home: NextPage = () => {
-  return <button className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">Submits</button>;
+  return (
+    <div>
+      <Image src={riceCake} placeholder="blur" />
+    </div>
+  );
 };
 export default Home;
