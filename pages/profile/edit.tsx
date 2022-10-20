@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import { v4 as uuidv4 } from "uuid";
 import firebase from "@libs/server/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
@@ -56,7 +57,7 @@ const Edit: NextPage = () => {
 
     if (imageFile && imageFile.length > 0) {
       const storageService = getStorage(firebase);
-      const imageRef = ref(storageService, `profile/${imageFile[0].name}`);
+      const imageRef = ref(storageService, `profile/${uuidv4()}`);
       const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
       uploadTask.on(
         "state_changed",

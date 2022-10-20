@@ -9,7 +9,7 @@ import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
-
+import { v4 as uuidv4 } from "uuid";
 import firebase from "@libs/server/firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
@@ -35,7 +35,7 @@ const Upload: NextPage = () => {
     if (loading) return;
     if (imageFile && imageFile.length > 0) {
       const storageService = getStorage(firebase);
-      const imageRef = ref(storageService, `product/${imageFile[0].name}`);
+      const imageRef = ref(storageService, `product/${uuidv4()}`);
       const uploadTask = uploadBytesResumable(imageRef, imageFile[0]);
       uploadTask.on(
         "state_changed",
