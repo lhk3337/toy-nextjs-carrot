@@ -11,6 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -22,12 +23,26 @@ interface ItemDetailResponse {
   relatedProducts: Product[];
 }
 
+interface ItemDeleteResponse {
+  ok: boolean;
+  isWriter: boolean;
+}
+
+interface DeletePost {
+  ok: boolean;
+  delPost: Product;
+}
+
 const ProductDetail: NextPage = () => {
   const router = useRouter();
   const { mutate } = useSWRConfig();
 
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
+  );
+  const { data: delData } = useSWR<ItemDeleteResponse>(`/api/products/${router.query.id}/delete`);
+  const [deletepost, { loading, data: delPostData }] = useMutation<DeletePost>(
+    `/api/products/${router.query.id}/delete`
   );
 
   const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
@@ -37,13 +52,26 @@ const ProductDetail: NextPage = () => {
     // mutate("/api/users/me", (prev: any) => prev && { ok: !prev.ok }, false);
     toggleFev({}); // fav model에 레코드가 있으면 삭제 없으면 생성
   };
+  const onDelPostClick = () => {
+    if (window.confirm("삭제 하시겠습니까?") === true) {
+      if (!loading) {
+        deletepost({});
+      }
+    } else {
+    }
+  };
+  useEffect(() => {
+    if (delPostData?.ok) {
+      router.push("/");
+    }
+  }, [router, delPostData]);
   return (
     <Layout canGoBack>
       <div className="py-10 px-4">
         <div className="mb-8">
           {!data ? (
             <Skeleton height={384} />
-          ) : data?.product.imageUrl ? (
+          ) : data?.product?.imageUrl ? (
             <div className="relative -z-10 pb-80">
               <Image
                 src={data.product.imageUrl}
@@ -58,19 +86,24 @@ const ProductDetail: NextPage = () => {
           {!data ? (
             <Skeleton height={50} className="mt-3" />
           ) : (
-            <div className="flex cursor-pointer items-center space-x-3 border-b py-3">
-              {data.product.user.avatar ? (
-                <div className="relative -z-10 h-10 w-10">
-                  <Image className="rounded-full" layout="fill" src={data.product.user.avatar} alt="avatar" />
+            <div className="flex  items-center justify-between border-b py-3 pr-3">
+              <div className="flex cursor-pointer items-center space-x-3">
+                {data?.product?.user.avatar ? (
+                  <div className="relative -z-10 h-10 w-10">
+                    <Image className="rounded-full" layout="fill" src={data.product.user.avatar} alt="avatar" />
+                  </div>
+                ) : (
+                  <div className="h-10 w-10 rounded-full bg-slate-300" />
+                )}
+                <div>
+                  <p className="text-sm">{data?.product?.user?.name}</p>
+                  <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+                    <a className="text-xs text-gray-500">View profile &rarr;</a>
+                  </Link>
                 </div>
-              ) : (
-                <div className="h-10 w-10 rounded-full bg-slate-300" />
-              )}
-              <div>
-                <p className="text-sm">{data?.product?.user?.name}</p>
-                <Link href={`/users/profiles/${data?.product?.user?.id}`}>
-                  <a className="text-xs text-gray-500">View profile &rarr;</a>
-                </Link>
+              </div>
+              <div className=" right-2 ">
+                {delData?.isWriter ? <Button text="삭제" small onClick={onDelPostClick} alertColor /> : null}
               </div>
             </div>
           )}
