@@ -116,7 +116,9 @@ const ProductDetail: NextPage = () => {
                 <p className="mt-3 text-2xl">{data?.product?.price.toLocaleString("ko-KR")}원</p>
                 <p className="my-6">{data?.product?.description}</p>
                 <div className="my-4 flex items-center justify-between space-x-2 ">
-                  <Button large text="Talk to seller" />
+                  <Link href={`/chats/${data?.product?.id}`}>
+                    <Button large text="Talk to seller" />
+                  </Link>
                   <button
                     onClick={onFavClick}
                     className={cls(
