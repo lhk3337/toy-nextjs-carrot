@@ -30,6 +30,7 @@ model User {
   records         Record[]
   streams         Stream[]
   messages        Message[]
+  Chat            Chat[]
 }
 
 model Token {
@@ -52,6 +53,7 @@ model Product {
   userId      Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   records     Record[]
+  Chat        Chat[]
 }
 
 model Post {
@@ -138,4 +140,15 @@ model Message {
   userId    Int
   stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId  Int
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chat      String   @db.LongText
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
 }
