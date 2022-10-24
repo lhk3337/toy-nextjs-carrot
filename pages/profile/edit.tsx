@@ -115,13 +115,14 @@ const Edit: NextPage = () => {
     <Layout canGoBack title="Edit Profile">
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center space-x-4">
-          {user?.avatar ? (
+          {user?.avatar && avatarPreview ? (
             <div className="relative -z-10 h-14 w-14">
               <Image
                 src={avatarPreview}
                 layout="fill"
                 className="rounded-full bg-transparent object-cover"
                 alt="avatar"
+                priority
               />
             </div>
           ) : (

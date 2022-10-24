@@ -16,7 +16,7 @@ export default function Items({ title, id, price, heart, comment, imgurl }: Item
         <div className="flex items-center space-x-5">
           {imgurl ? (
             <div className="relative -z-10 h-20 w-20">
-              <Image src={imgurl} className="rounded-md" layout="fill" objectFit="cover" alt="productImg" />
+              <Image src={imgurl} className="rounded-md" layout="fill" objectFit="cover" alt="productImg" priority />
             </div>
           ) : (
             <div className="h-20 w-20 rounded-md bg-gray-400" />

@@ -141,6 +141,7 @@ const Profile: NextPage = () => {
                       layout="fill"
                       src={review.createdBy.avatar}
                       alt="avatar"
+                      priority
                     />
                   </div>
                 ) : (
