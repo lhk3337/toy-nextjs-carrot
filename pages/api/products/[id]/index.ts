@@ -12,6 +12,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     where: { id: Number(id) },
     include: { user: { select: { id: true, name: true, avatar: true } } },
   });
+  const chat = await client.chat.findFirst({
+    where: { userId: user?.id, productId: Number(id) },
+  });
+  const chatId = chat?.id;
   const terms = product?.name.split(" ").map((word) => ({
     name: {
       contains: word,
@@ -39,7 +43,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
     })
   );
-  res.json({ ok: true, product, isLiked, relatedProducts });
+  res.json({ ok: true, product, chatId, isLiked, relatedProducts });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));

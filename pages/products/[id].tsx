@@ -4,7 +4,7 @@ import Layout from "@components/layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
-import { Product, User } from "@prisma/client";
+import { Chat, Product, User } from "@prisma/client";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -20,6 +20,7 @@ interface ItemDetailResponse {
   ok: boolean;
   product: ProductWithUser;
   isLiked: boolean;
+  chatId: number;
   relatedProducts: Product[];
 }
 
@@ -31,6 +32,11 @@ interface ItemDeleteResponse {
 interface DeletePost {
   ok: boolean;
   delPost: Product;
+}
+
+interface CreateChatResponse {
+  ok: boolean;
+  createChat: Chat;
 }
 
 const ProductDetail: NextPage = () => {
@@ -46,6 +52,8 @@ const ProductDetail: NextPage = () => {
   );
 
   const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
+  const [chat, { loading: chatLoading, data: chatData }] = useMutation<CreateChatResponse>("/api/chats");
+
   const onFavClick = () => {
     if (!data) return;
     boundMutate((prev) => prev && { ...prev, isLiked: !prev.isLiked }, false);
@@ -60,11 +68,27 @@ const ProductDetail: NextPage = () => {
     } else {
     }
   };
+  const onCreateChatClick = () => {
+    chat({ id: router.query.id });
+  };
   useEffect(() => {
     if (delPostData?.ok) {
       router.push("/");
     }
   }, [router, delPostData]);
+
+  useEffect(() => {
+    if (chatData?.ok) {
+      router.push(`/chats/${chatData.createChat.id}`);
+    }
+  }, [router, chatData]);
+
+  useEffect(() => {
+    if (chatData?.ok === false) {
+      router.push(`/chats/${data?.chatId}`);
+    }
+  }, [chatData?.ok, data?.chatId, router]);
+
   return (
     <Layout canGoBack>
       <div className="py-10 px-4">
@@ -78,6 +102,7 @@ const ProductDetail: NextPage = () => {
                 layout="fill"
                 className="rounded-sm object-contain"
                 alt="detailProductImage"
+                priority
               />
             </div>
           ) : (
@@ -90,7 +115,13 @@ const ProductDetail: NextPage = () => {
               <div className="flex cursor-pointer items-center space-x-3">
                 {data?.product?.user.avatar ? (
                   <div className="relative -z-10 h-10 w-10">
-                    <Image className="rounded-full" layout="fill" src={data.product.user.avatar} alt="avatar" />
+                    <Image
+                      className="rounded-full"
+                      layout="fill"
+                      src={data.product.user.avatar}
+                      alt="avatar"
+                      priority
+                    />
                   </div>
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-slate-300" />
@@ -116,9 +147,7 @@ const ProductDetail: NextPage = () => {
                 <p className="mt-3 text-2xl">{data?.product?.price.toLocaleString("ko-KR")}원</p>
                 <p className="my-6">{data?.product?.description}</p>
                 <div className="my-4 flex items-center justify-between space-x-2 ">
-                  <Link href={`/chats/${data?.product?.id}`}>
-                    <Button large text="Talk to seller" />
-                  </Link>
+                  <Button large text="Talk to seller" onClick={onCreateChatClick} />
                   <button
                     onClick={onFavClick}
                     className={cls(
