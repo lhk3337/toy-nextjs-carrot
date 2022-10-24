@@ -138,17 +138,19 @@ model Message {
   message   String   @db.MediumText
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId  Int
+  stream    Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
+  streamId  Int?
+  Chat      Chat?    @relation(fields: [chatId], references: [id])
+  chatId    Int?
 }
 
 model Chat {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  chat      String   @db.LongText
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
