@@ -51,6 +51,7 @@ const Profile: NextPage = () => {
                   className="rounded-full bg-transparent object-cover"
                   layout="fill"
                   alt="avatar"
+                  priority
                 />
               </div>
             ) : (
