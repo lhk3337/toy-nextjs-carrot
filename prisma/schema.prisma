@@ -30,7 +30,8 @@ model User {
   records         Record[]
   streams         Stream[]
   messages        Message[]
-  Chat            Chat[]
+  sellerChat      Chat[]      @relation(name: "sellerChat")
+  buyerChat       Chat[]      @relation(name: "buyerChat")
 }
 
 model Token {
@@ -149,8 +150,10 @@ model Chat {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   messages  Message[]
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
+  seller    User      @relation(name: "sellerChat", fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId  Int
+  buyer     User      @relation(name: "buyerChat", fields: [buyerId], references: [id], onDelete: Cascade)
+  buyerId   Int
   product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
