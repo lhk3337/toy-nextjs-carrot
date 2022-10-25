@@ -12,6 +12,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
 import { useEffect } from "react";
+import useUser from "@libs/client/useUser";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -42,7 +43,7 @@ interface CreateChatResponse {
 const ProductDetail: NextPage = () => {
   const router = useRouter();
   const { mutate } = useSWRConfig();
-
+  const { user } = useUser();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
@@ -60,6 +61,7 @@ const ProductDetail: NextPage = () => {
     // mutate("/api/users/me", (prev: any) => prev && { ok: !prev.ok }, false);
     toggleFev({}); // fav model에 레코드가 있으면 삭제 없으면 생성
   };
+
   const onDelPostClick = () => {
     if (window.confirm("삭제 하시겠습니까?") === true) {
       if (!loading) {
@@ -69,7 +71,11 @@ const ProductDetail: NextPage = () => {
     }
   };
   const onCreateChatClick = () => {
-    chat({ id: router.query.id });
+    if (data?.product.userId === user?.id) {
+      alert("판매자이기 때문에 채팅을 할 수 없습니다.");
+    } else {
+      chat({ id: router.query.id });
+    }
   };
   useEffect(() => {
     if (delPostData?.ok) {
