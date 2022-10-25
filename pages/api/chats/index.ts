@@ -8,23 +8,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     body: { id },
     session: { user },
   } = req;
-
   if (req.method === "POST") {
+    const productUser = await client.product.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
     const isChat = Boolean(
       await client.chat.findFirst({
         where: {
           productId: Number(id),
-          userId: user?.id,
+          sellerId: productUser?.userId,
+          buyerId: user?.id,
         },
       })
     );
-
     if (isChat) {
       res.json({ ok: false });
     } else {
       const createChat = await client.chat.create({
         data: {
-          user: { connect: { id: user?.id } },
+          seller: { connect: { id: productUser?.userId } },
+          buyer: { connect: { id: user?.id } },
           product: { connect: { id: Number(id) } },
         },
       });
@@ -33,13 +38,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   }
   if (req.method === "GET") {
     const chatList = await client.chat.findMany({
+      where: {
+        OR: [{ buyerId: user?.id }, { sellerId: user?.id }],
+      },
       include: {
         messages: {
           select: {
             message: true,
           },
         },
-        user: {
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        buyer: {
           select: {
             id: true,
             name: true,
