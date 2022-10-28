@@ -37,7 +37,7 @@ export default function OtherUser({ chatImg, userId }: ChatImages) {
       )}
       <div>
         <p className="text-gray-700">
-          {userId === chatImg.sellerId ? chatImg.buyer.name : userId === chatImg.buyerId ? chatImg.seller.name : ""}
+          {userId === chatImg.sellerId ? chatImg.buyer.name : userId === chatImg.buyerId && chatImg.seller.name}
         </p>
         <p className="text-sm text-gray-500">{chatImg?.messages[chatImg.messages?.length - 1]?.message}</p>
       </div>

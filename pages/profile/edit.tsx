@@ -168,9 +168,9 @@ const Edit: NextPage = () => {
             required={false}
           />
         </div>
-        {errors.formErrors ? (
+        {errors.formErrors && (
           <span className="my-1 block text-center text-sm font-bold text-red-500">{errors.formErrors?.message}</span>
-        ) : null}
+        )}
         <Button text={loading ? "Loading..." : "Update Profile"} />
       </form>
     </Layout>

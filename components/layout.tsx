@@ -23,7 +23,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
           "fixed top-0 flex w-full max-w-lg items-center space-x-2 border-b bg-white py-3 px-3 text-lg font-medium text-gray-700"
         )}
       >
-        {canGoBack ? (
+        {canGoBack && (
           <button onClick={onClick}>
             <svg
               className="h-6 w-6"
@@ -35,11 +35,11 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-        ) : null}
-        {title ? <span>{title}</span> : null}
+        )}
+        {title && <span>{title}</span>}
       </div>
       <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
-      {hasTabBar ? (
+      {hasTabBar && (
         <nav className="fixed bottom-0 flex w-full max-w-lg items-center justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-800">
           <Link href="/">
             <a className="flex flex-col items-center space-y-2">
@@ -137,7 +137,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
             </a>
           </Link>
         </nav>
-      ) : null}
+      )}
     </div>
   );
 }

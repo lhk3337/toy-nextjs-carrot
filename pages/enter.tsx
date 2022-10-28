@@ -101,7 +101,7 @@ export default function Enter() {
             </div>
             <form onSubmit={handleSubmit(onValid)} className="mt-8 flex flex-col space-y-4">
               <div className="mt-2">
-                {method === "email" ? (
+                {method === "email" && (
                   <Input
                     register={register("email")}
                     label="Email address"
@@ -110,8 +110,8 @@ export default function Enter() {
                     placeholder="이메일을 입력해주세요"
                     required
                   />
-                ) : null}
-                {method === "phone" ? (
+                )}
+                {method === "phone" && (
                   <Input
                     register={register("phone")}
                     kind="phone"
@@ -120,10 +120,10 @@ export default function Enter() {
                     type="number"
                     required
                   />
-                ) : null}
+                )}
               </div>
-              {method === "email" ? <Button text={loading ? "Loading" : "Get login link"} /> : null}
-              {method === "phone" ? <Button text={loading ? "Loading" : "Get one-time password"} /> : null}
+              {method === "email" && <Button text={loading ? "Loading" : "Get login link"} />}
+              {method === "phone" && <Button text={loading ? "Loading" : "Get one-time password"} />}
             </form>
           </>
         )}

@@ -10,11 +10,11 @@ interface TextAreaProps {
 export default function TextArea({ label, name, register, rows, required, placeholder }: TextAreaProps) {
   return (
     <>
-      {label ? (
+      {label && (
         <label htmlFor={name} className="mb-1 block text-sm font-medium text-gray-500">
           {label}
         </label>
-      ) : null}
+      )}
       <textarea
         id={name}
         rows={rows}
