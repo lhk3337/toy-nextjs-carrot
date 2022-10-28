@@ -18,15 +18,19 @@ export default function withHandler({ methods, isPrivate = true, handler }: Conf
     if (isPrivate && !req.session.user?.id) {
       return res.status(401).json({ ok: false, error: "plz log in." });
     }
-
     try {
-      handler(req, res);
+      await handler(req, res);
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error });
     }
   };
 }
+
+/*
+ API resolved without sending a response for /api/products, this may result in stalled requests.
+ warning Message출력하여 handler()앞에 await 추가했더니 없어짐
+*/
 
 /*
 HOF(Higher Order Function)
