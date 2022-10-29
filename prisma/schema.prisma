@@ -141,7 +141,7 @@ model Message {
   userId    Int
   stream    Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId  Int?
-  Chat      Chat?    @relation(fields: [chatId], references: [id])
+  chat      Chat?    @relation(fields: [chatId], references: [id])
   chatId    Int?
 }
 
