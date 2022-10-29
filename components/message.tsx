@@ -18,8 +18,15 @@ export default function Message({ message, reversed, img }: MessageProps) {
         ) : (
           <div className="h-8 w-8 rounded-full bg-slate-300" />
         )}
-        <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-          <p>{message}</p>
+        <div>
+          <span
+            className={cls(
+              "w-1/2 rounded-3xl  bg-slate-100 px-4 py-3 text-sm text-black",
+              reversed ? "bg-orange-500 text-white" : ""
+            )}
+          >
+            {message}
+          </span>
         </div>
       </div>
     </>
