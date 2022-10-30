@@ -1,36 +1,95 @@
 import type { NextPage } from "next";
 import Layout from "@components/layout";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+
+import { useForm } from "react-hook-form";
+import { MessageForm } from "@pages/streams/[id]";
+import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
+import Items from "@components/items";
+import Message from "@components/message";
+import { Chat, Product, User } from "@prisma/client";
+import { useEffect, useRef } from "react";
+
+interface ChatMessage {
+  message: string;
+  id: number;
+  user: {
+    avatar?: string;
+    id: number;
+  };
+}
+interface ChatWithMessage extends Chat {
+  buyer: User;
+  seller: User;
+  product: Product;
+  messages: ChatMessage[];
+}
+interface ChatResponse {
+  ok: true;
+  chat: ChatWithMessage;
+}
+
 const ChatDetail: NextPage = () => {
+  const router = useRouter();
+  const { user } = useUser();
+  const { data, mutate } = useSWR<ChatResponse>(router.query.id ? `/api/chats/${router.query.id}` : null, {
+    refreshInterval: 1000,
+  });
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation(`/api/chats/${router.query.id}/message`);
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
+  const onValid = (form: MessageForm) => {
+    if (loading) return;
+    reset();
+    mutate(
+      (prev) =>
+        prev && {
+          ...prev,
+          chat: {
+            ...prev.chat,
+            messages: [...prev.chat.messages, { id: Date.now(), message: form.message, user: { ...user } }],
+          } as any,
+        },
+      false
+    );
+    sendMessage(form);
+  };
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  });
+
   return (
-    <Layout canGoBack title="Steve">
-      <div className="space-y-6 px-4 pt-8 pb-16">
-        {Array(10)
-          .fill("")
-          .map((_, i) => (
-            <>
-              <div className="flex-start flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-slate-300" />
-                <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                  <p>Hi how much are you selling them for?</p>
-                </div>
-              </div>
-              <div className="flex-start flex flex-row-reverse items-center space-x-2 space-x-reverse">
-                <div className="h-8 w-8 rounded-full bg-slate-300" />
-                <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                  <p>I want ￦20,000</p>
-                </div>
-              </div>
-              <div className="flex-start flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-slate-300" />
-                <div className="w-1/2 rounded-md border border-gray-300 p-2 text-sm  text-gray-500">
-                  <p>미쳤어</p>
-                </div>
-              </div>
-            </>
+    <Layout
+      canGoBack
+      title={
+        user?.id === data?.chat.sellerId
+          ? data?.chat.buyer.name
+          : user?.id === data?.chat.buyerId
+          ? data?.chat.seller.name
+          : ""
+      }
+    >
+      <div className="space-y-6 px-4 pt-2 pb-8">
+        <Items
+          key={data?.chat?.product?.id}
+          price={data?.chat.product.price}
+          title={data?.chat.product.name}
+          imgurl={data?.chat.product.imageUrl}
+        />
+
+        <div className="h-[73vh] space-y-4 overflow-y-scroll px-4 pt-2  scrollbar-hide">
+          {data?.chat.messages.map((message) => (
+            <div key={message.id} ref={scrollRef}>
+              <Message message={message.message} img={message.user.avatar} reversed={message.user.id === user?.id} />
+            </div>
           ))}
+        </div>
         <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
-          <div className="relative flex items-center">
+          <form onSubmit={handleSubmit(onValid)} className="relative flex items-center">
             <input
+              {...register("message", { required: true })}
               type="text"
               className="w-full appearance-none rounded-full  border border-gray-300  pr-12 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
             />
@@ -39,7 +98,7 @@ const ChatDetail: NextPage = () => {
                 &rarr;
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>
