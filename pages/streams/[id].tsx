@@ -14,7 +14,7 @@ interface StreamResponse {
   stream: StreamWithMessage;
 }
 
-interface MessageForm {
+export interface MessageForm {
   message: string;
 }
 

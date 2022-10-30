@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR from "swr";
 import Layout from "@components/layout";
-import { Chat, Message, User } from "@prisma/client";
+import { Chat, Message, Product, User } from "@prisma/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import OtherUser from "@components/otherUser";
@@ -11,6 +11,7 @@ import OtherUser from "@components/otherUser";
 export interface ChatwithUser extends Chat {
   buyer: User;
   seller: User;
+  product: Product;
   messages: Message[];
 }
 interface ChatResponse {
