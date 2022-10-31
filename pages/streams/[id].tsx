@@ -21,6 +21,7 @@ export interface MessageForm {
 interface StreamMessage {
   message: string;
   id: number;
+  createdAt: Date;
   user: {
     avatar?: string;
     id: number;
@@ -48,7 +49,10 @@ const StreamDetail: NextPage = () => {
           ...prev,
           stream: {
             ...prev.stream,
-            messages: [...prev.stream.messages, { id: Date.now(), message: form.message, user: { ...user } }],
+            messages: [
+              ...prev.stream.messages,
+              { id: Date.now(), createdAt: new Date(), message: form.message, user: { ...user } },
+            ],
           } as any,
         },
       false
@@ -72,7 +76,12 @@ const StreamDetail: NextPage = () => {
         <div className="h-[40vh] space-y-4 overflow-y-scroll px-4 py-8 scrollbar-hide">
           {data?.stream.messages.map((message) => (
             <div key={message.id} ref={scrollRef}>
-              <Message message={message.message} img={message.user.avatar} reversed={message.user.id === user?.id} />
+              <Message
+                message={message.message}
+                sendTime={message.createdAt}
+                img={message.user.avatar}
+                reversed={message.user.id === user?.id}
+              />
             </div>
           ))}
         </div>

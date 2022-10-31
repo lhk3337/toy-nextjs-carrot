@@ -17,6 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         select: {
           message: true,
           id: true,
+          createdAt: true,
           user: {
             select: {
               avatar: true,
