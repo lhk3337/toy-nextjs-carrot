@@ -54,7 +54,7 @@ model Product {
   userId      Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   records     Record[]
-  Chat        Chat[]
+  chats       Chat[]
 }
 
 model Post {
@@ -141,7 +141,7 @@ model Message {
   userId    Int
   stream    Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId  Int?
-  chat      Chat?    @relation(fields: [chatId], references: [id])
+  chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    Int?
 }
 
