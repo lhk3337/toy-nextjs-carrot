@@ -15,6 +15,7 @@ import { useEffect, useRef } from "react";
 interface ChatMessage {
   message: string;
   id: number;
+  createdAt: Date;
   user: {
     avatar?: string;
     id: number;
@@ -37,7 +38,7 @@ const ChatDetail: NextPage = () => {
   const { data, mutate } = useSWR<ChatResponse>(router.query.id ? `/api/chats/${router.query.id}` : null, {
     refreshInterval: 1000,
   });
-  const [sendMessage, { loading, data: sendMessageData }] = useMutation(`/api/chats/${router.query.id}/message`);
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation<any>(`/api/chats/${router.query.id}/message`);
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const onValid = (form: MessageForm) => {
     if (loading) return;
@@ -48,13 +49,22 @@ const ChatDetail: NextPage = () => {
           ...prev,
           chat: {
             ...prev.chat,
-            messages: [...prev.chat.messages, { id: Date.now(), message: form.message, user: { ...user } }],
+            messages: [
+              ...prev.chat.messages,
+              {
+                id: Date.now(),
+                createdAt: Date.now(),
+                message: form.message,
+                user: { ...user },
+              },
+            ],
           } as any,
         },
       false
     );
     sendMessage(form);
   };
+
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
@@ -82,7 +92,12 @@ const ChatDetail: NextPage = () => {
         <div className="h-[73vh] space-y-4 overflow-y-scroll px-4 pt-2  scrollbar-hide">
           {data?.chat.messages.map((message) => (
             <div key={message.id} ref={scrollRef}>
-              <Message message={message.message} img={message.user.avatar} reversed={message.user.id === user?.id} />
+              <Message
+                message={message.message}
+                sendTime={message.createdAt}
+                img={message.user.avatar}
+                reversed={message.user.id === user?.id}
+              />
             </div>
           ))}
         </div>

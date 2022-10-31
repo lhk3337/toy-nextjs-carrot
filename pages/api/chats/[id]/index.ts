@@ -12,7 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       id: Number(id),
     },
     include: {
-      messages: { select: { message: true, id: true, user: { select: { avatar: true, id: true } } } },
+      messages: { select: { message: true, createdAt: true, id: true, user: { select: { avatar: true, id: true } } } },
       product: {
         select: {
           price: true,

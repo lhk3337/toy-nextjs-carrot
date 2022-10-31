@@ -1,11 +1,16 @@
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
+import { send } from "process";
+import Time from "./time";
 interface MessageProps {
   message: string;
   reversed?: boolean;
   img?: string;
+  sendTime: Date;
 }
-export default function Message({ message, reversed, img }: MessageProps) {
+export default function Message({ message, sendTime: time, reversed, img }: MessageProps) {
+  const sendTime = new Date(time);
+
   return (
     <>
       <div
@@ -21,13 +26,14 @@ export default function Message({ message, reversed, img }: MessageProps) {
         <div>
           <span
             className={cls(
-              "w-1/2 rounded-3xl  bg-slate-100 px-4 py-3 text-sm text-black",
-              reversed ? "bg-orange-500 text-white" : ""
+              "w-1/2 rounded-3xl  px-4 py-3 text-sm ",
+              reversed ? "bg-orange-500 text-white" : "bg-slate-100 text-black"
             )}
           >
             {message}
           </span>
         </div>
+        <Time time={sendTime} />
       </div>
     </>
   );
