@@ -11,6 +11,7 @@ import { cls } from "@libs/client/utils";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import Image from "next/image";
+import Time from "@components/time";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -148,6 +149,7 @@ const CommunityPostDetail: NextPage = () => {
         </div>
         <div className="my-5 space-y-5 px-4">
           {data?.post.answers.map((answer) => {
+            const replyTime = new Date(answer.createdAt);
             return (
               <div key={answer.id} className="flex items-start space-x-3">
                 {answer.user.avatar ? (
@@ -160,7 +162,9 @@ const CommunityPostDetail: NextPage = () => {
 
                 <div>
                   <span className="block text-sm font-medium text-gray-700">{answer?.user?.name}</span>
-                  <span className="block text-xs text-gray-500">{String(answer.createdAt)}</span>
+                  <span className="block text-xs text-gray-500">
+                    <Time time={replyTime} />
+                  </span>
                   <p className="mt-2 text-gray-700 ">{answer.answer}</p>
                 </div>
               </div>
