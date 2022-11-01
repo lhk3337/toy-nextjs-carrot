@@ -1,6 +1,5 @@
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
-import { send } from "process";
 import Time from "./time";
 interface MessageProps {
   message: string;
@@ -14,7 +13,10 @@ export default function Message({ message, sendTime: time, reversed, img }: Mess
   return (
     <>
       <div
-        className={cls("flex-start flex items-center space-x-2", reversed ? "flex-row-reverse space-x-reverse" : "")}
+        className={cls(
+          "flex-start flex items-center space-x-2 pb-4",
+          reversed ? "flex-row-reverse space-x-reverse" : ""
+        )}
       >
         {img ? (
           <div className="relative -z-10 h-8 w-8">
