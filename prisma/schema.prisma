@@ -48,6 +48,7 @@ model Product {
   imageUrl    String
   name        String
   price       Int
+  sellState   String   @default("selling")
   description String   @db.MediumText
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
