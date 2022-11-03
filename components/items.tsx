@@ -1,15 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
+import ProductStateText from "./productStateText";
 interface ItemsProps {
   title?: string;
   price?: number;
   heart?: number;
   comment?: number;
   id?: number;
+  itemState: string;
   imgurl?: string;
 }
 
-export default function Items({ title, id, price, heart, comment, imgurl }: ItemsProps) {
+export default function Items({ title, id, itemState, price, heart, comment, imgurl }: ItemsProps) {
   return (
     <>
       {id ? (
@@ -32,7 +34,10 @@ export default function Items({ title, id, price, heart, comment, imgurl }: Item
               )}
               <div className="flex flex-col">
                 <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-                <span className="text-gray-9000 mt-1 font-bold">{price?.toLocaleString("ko-KR")}원</span>
+                <div>
+                  <ProductStateText data={itemState} small />
+                  <span className="text-gray-9000 mt-1 ml-2 font-bold">{price?.toLocaleString("ko-KR")}원</span>
+                </div>
               </div>
             </div>
             <div className="flex items-end justify-end space-x-3">

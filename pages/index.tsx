@@ -19,11 +19,13 @@ interface ProductResponse {
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
   const { data, error } = useSWR<ProductResponse>("api/products");
+
   return (
     <Layout title="Home" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (
           <Items
+            itemState={product.sellState}
             key={product.id}
             id={product.id}
             title={product.name}

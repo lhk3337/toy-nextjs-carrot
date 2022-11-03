@@ -11,8 +11,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import useUser from "@libs/client/useUser";
+import { useForm } from "react-hook-form";
+import ProductStateText from "@components/productStateText";
+import { isSelectDealState } from "@libs/client/isSelectDealState";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -44,16 +47,23 @@ const ProductDetail: NextPage = () => {
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { user } = useUser();
+  const { register, setValue } = useForm();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-  const { data: delData } = useSWR<ItemDeleteResponse>(`/api/products/${router.query.id}/delete`);
+  const { data: productSeller } = useSWR<ItemDeleteResponse>(
+    router.query.id && `/api/products/${router.query.id}/delete`
+  ); // 유저가 판매자 인지 확인하기
+
   const [deletepost, { loading, data: delPostData }] = useMutation<DeletePost>(
     `/api/products/${router.query.id}/delete`
-  );
+  ); // product detail 삭제하기
 
-  const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`);
-  const [chat, { loading: chatLoading, data: chatData }] = useMutation<CreateChatResponse>("/api/chats");
+  const [toggleFev] = useMutation(`/api/products/${router.query.id}/fav`); // 좋아요 클릭시 1 카운트
+
+  const [chat, { loading: chatLoading, data: chatData }] = useMutation<CreateChatResponse>("/api/chats"); // chatting 만들기
+
+  const [productState] = useMutation(`/api/products/${router.query.id}`); //상품 상태 변경하기
 
   const onFavClick = () => {
     if (!data) return;
@@ -77,6 +87,11 @@ const ProductDetail: NextPage = () => {
       chat({ id: router.query.id });
     }
   };
+  // console.log(data);
+  const onValid = (e: any) => {
+    boundMutate((prev) => prev && { ...prev, product: { ...prev.product, sellState: e.target.value } }, false);
+    productState({ sellState: e.target.value });
+  };
   useEffect(() => {
     if (delPostData?.ok) {
       router.push("/");
@@ -94,6 +109,9 @@ const ProductDetail: NextPage = () => {
       router.push(`/chats/${data?.chatId}`);
     }
   }, [chatData?.ok, data?.chatId, router]);
+  useEffect(() => {
+    if (data?.product.sellState) setValue("sellState", data?.product.sellState);
+  }, [data?.product, setValue]);
 
   return (
     <Layout canGoBack>
@@ -140,7 +158,7 @@ const ProductDetail: NextPage = () => {
                 </div>
               </div>
               <div className=" right-2 ">
-                {delData?.isWriter ? <Button text="삭제" small onClick={onDelPostClick} alertColor /> : null}
+                {productSeller?.isWriter ? <Button text="삭제" small onClick={onDelPostClick} alertColor /> : null}
               </div>
             </div>
           )}
@@ -149,11 +167,29 @@ const ProductDetail: NextPage = () => {
               <Skeleton height={40} count={4} />
             ) : (
               <>
+                {productSeller?.isWriter ? (
+                  <select {...register("sellState", { onChange: (e) => onValid(e) })} className="mb-3">
+                    {isSelectDealState.map((el, i) => (
+                      <option key={i} value={el.value}>
+                        {el.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <ProductStateText data={data?.product.sellState} />
+                )}
                 <h1 className="text-3xl font-bold">{data?.product?.name}</h1>
                 <p className="mt-3 text-2xl">{data?.product?.price.toLocaleString("ko-KR")}원</p>
                 <p className="my-6">{data?.product?.description}</p>
                 <div className="my-4 flex items-center justify-between space-x-2 ">
-                  <Button large text="Talk to seller" onClick={onCreateChatClick} />
+                  {data?.product.sellState === "sold" ? (
+                    <Button sold large text="판매 완료 된 상품 입니다." />
+                  ) : data.product.sellState === "reserve" ? (
+                    <Button reserve large text="예약 중인 상품 입니다." />
+                  ) : (
+                    <Button large text="Talk to seller" onClick={onCreateChatClick} />
+                  )}
+
                   <button
                     onClick={onFavClick}
                     className={cls(
@@ -193,7 +229,19 @@ const ProductDetail: NextPage = () => {
               {data?.relatedProducts?.map((product) => (
                 <Link href={`/products/${product?.id}`} key={product.id}>
                   <a>
-                    <div className="mb-4 h-56 w-full bg-slate-300" />
+                    {product.imageUrl ? (
+                      <div className="relative -z-10 h-56">
+                        <Image
+                          className="object-cover"
+                          layout="fill"
+                          src={product.imageUrl}
+                          alt="productImg"
+                          priority
+                        />
+                      </div>
+                    ) : (
+                      <div className="mb-4 h-56 w-full bg-slate-300" />
+                    )}
                     <h3 className="-mb-1 text-gray-700">{product.name}</h3>
                     <p className="mt-2 text-sm font-medium text-gray-900">{product.price.toLocaleString("ko-KR")}원</p>
                   </a>
