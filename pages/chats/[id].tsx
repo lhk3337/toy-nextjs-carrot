@@ -38,6 +38,7 @@ const ChatDetail: NextPage = () => {
   const { data, mutate } = useSWR<ChatResponse>(router.query.id ? `/api/chats/${router.query.id}` : null, {
     refreshInterval: 1000,
   });
+
   const [sendMessage, { loading, data: sendMessageData }] = useMutation<any>(`/api/chats/${router.query.id}/message`);
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const onValid = (form: MessageForm) => {
@@ -86,6 +87,7 @@ const ChatDetail: NextPage = () => {
           key={data?.chat?.product?.id}
           price={data?.chat.product.price}
           title={data?.chat.product.name}
+          itemState={data?.chat.product.sellState}
           imgurl={data?.chat.product.imageUrl}
         />
 

@@ -7,7 +7,7 @@ interface ItemsProps {
   heart?: number;
   comment?: number;
   id?: number;
-  itemState: string;
+  itemState?: string;
   imgurl?: string;
 }
 
@@ -35,7 +35,7 @@ export default function Items({ title, id, itemState, price, heart, comment, img
               <div className="flex flex-col">
                 <h3 className="text-sm font-medium text-gray-900">{title}</h3>
                 <div>
-                  <ProductStateText data={itemState} small />
+                  {itemState && <ProductStateText data={itemState} small />}
                   <span className="text-gray-9000 mt-1 ml-2 font-bold">{price?.toLocaleString("ko-KR")}원</span>
                 </div>
               </div>
@@ -90,7 +90,10 @@ export default function Items({ title, id, itemState, price, heart, comment, img
             )}
             <div className="flex flex-col">
               <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-              <span className="text-gray-9000 mt-1 font-bold">{price?.toLocaleString("ko-KR")}원</span>
+              <div>
+                {itemState && <ProductStateText data={itemState} small />}
+                <span className="text-gray-9000 mt-1 ml-2 font-bold">{price?.toLocaleString("ko-KR")}원</span>
+              </div>
             </div>
           </div>
         </div>

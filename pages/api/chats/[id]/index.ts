@@ -19,6 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           imageUrl: true,
           name: true,
           id: true,
+          sellState: true,
         },
       },
       seller: {
