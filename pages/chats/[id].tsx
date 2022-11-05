@@ -83,14 +83,7 @@ const ChatDetail: NextPage = () => {
       }
     >
       <div className="space-y-6 px-4 pt-2 pb-8">
-        <Items
-          key={data?.chat?.product?.id}
-          price={data?.chat.product.price}
-          title={data?.chat.product.name}
-          itemState={data?.chat.product.sellState}
-          imgurl={data?.chat.product.imageUrl}
-        />
-
+        <Items {...data?.chat.product} id={0} />
         <div className="h-[73vh] space-y-4 overflow-y-scroll px-4 pt-2  scrollbar-hide">
           {data?.chat.messages.map((message) => (
             <div key={message.id} ref={scrollRef}>

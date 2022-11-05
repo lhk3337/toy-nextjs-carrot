@@ -2,26 +2,28 @@ import Link from "next/link";
 import Image from "next/image";
 import ProductStateText from "./productStateText";
 interface ItemsProps {
-  title?: string;
+  name?: string;
   price?: number;
-  heart?: number;
+  _count?: {
+    liked: number;
+  };
   comment?: number;
   id?: number;
-  itemState?: string;
-  imgurl?: string;
+  sellState?: string;
+  imageUrl?: string;
 }
 
-export default function Items({ title, id, itemState, price, heart, comment, imgurl }: ItemsProps) {
+export default function Items({ name, id, sellState, price, _count, comment, imageUrl }: ItemsProps) {
   return (
     <>
       {id ? (
         <Link href={`/products/${id}`}>
           <a className="flex cursor-pointer justify-between px-4 pt-4">
             <div className="flex items-center space-x-5">
-              {imgurl ? (
+              {imageUrl ? (
                 <div className="relative -z-10 h-20 w-20">
                   <Image
-                    src={imgurl}
+                    src={imageUrl}
                     className="rounded-md"
                     layout="fill"
                     objectFit="cover"
@@ -33,9 +35,9 @@ export default function Items({ title, id, itemState, price, heart, comment, img
                 <div className="h-20 w-20 rounded-md bg-gray-400" />
               )}
               <div className="flex flex-col">
-                <h3 className="text-sm font-medium text-gray-900">{title}</h3>
+                <h3 className="text-sm font-medium text-gray-900">{name}</h3>
                 <div>
-                  {itemState && <ProductStateText data={itemState} small />}
+                  {sellState && <ProductStateText data={sellState} small />}
                   <span className="text-gray-9000 mt-1 ml-2 font-bold">{price?.toLocaleString("ko-KR")}원</span>
                 </div>
               </div>
@@ -56,7 +58,7 @@ export default function Items({ title, id, itemState, price, heart, comment, img
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                   ></path>
                 </svg>
-                <span>{heart}</span>
+                <span>{_count?.liked}</span>
               </div>
               <div className="flex items-center space-x-0.5 text-sm text-gray-600 ">
                 <svg
@@ -81,17 +83,24 @@ export default function Items({ title, id, itemState, price, heart, comment, img
       ) : (
         <div className="flex justify-between px-4 pt-4">
           <div className="flex items-center space-x-5">
-            {imgurl ? (
+            {imageUrl ? (
               <div className="relative -z-10 h-20 w-20">
-                <Image src={imgurl} className="rounded-md" layout="fill" objectFit="cover" alt="productImg" priority />
+                <Image
+                  src={imageUrl}
+                  className="rounded-md"
+                  layout="fill"
+                  objectFit="cover"
+                  alt="productImg"
+                  priority
+                />
               </div>
             ) : (
               <div className="h-20 w-20 rounded-md bg-gray-400" />
             )}
             <div className="flex flex-col">
-              <h3 className="text-sm font-medium text-gray-900">{title}</h3>
+              <h3 className="text-sm font-medium text-gray-900">{name}</h3>
               <div>
-                {itemState && <ProductStateText data={itemState} small />}
+                {sellState && <ProductStateText data={sellState} small />}
                 <span className="text-gray-9000 mt-1 ml-2 font-bold">{price?.toLocaleString("ko-KR")}원</span>
               </div>
             </div>

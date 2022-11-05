@@ -24,16 +24,7 @@ const Home: NextPage = () => {
     <Layout title="Home" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (
-          <Items
-            itemState={product.sellState}
-            key={product.id}
-            id={product.id}
-            title={product.name}
-            price={product.price}
-            heart={product._count.liked}
-            imgurl={product.imageUrl}
-            comment={1}
-          />
+          <Items {...product} key={product.id} comment={1} />
         ))}
         <FixedButton type="add" href="/products/upload" />
       </div>

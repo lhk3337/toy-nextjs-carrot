@@ -20,15 +20,7 @@ export default function ProductList({ kind }: ProductListProps) {
     data && (
       <>
         {data[kind]?.map((record: Records) => (
-          <Items
-            id={record.product.id}
-            key={record.id}
-            title={record.product.name}
-            price={record.product.price}
-            heart={record.product._count.liked}
-            imgurl={record.product.imageUrl}
-            comment={1}
-          />
+          <Items {...record.product} key={record.product.id} comment={1} />
         ))}
       </>
     )
