@@ -11,6 +11,7 @@ import Items from "@components/items";
 import Message from "@components/message";
 import { Chat, Product, User } from "@prisma/client";
 import { useEffect, useRef } from "react";
+import Button from "@components/button";
 
 interface ChatMessage {
   message: string;
@@ -70,7 +71,9 @@ const ChatDetail: NextPage = () => {
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
   });
-
+  const onReviewClick = () => {
+    router.push("/review");
+  };
   return (
     <Layout
       canGoBack
@@ -83,7 +86,12 @@ const ChatDetail: NextPage = () => {
       }
     >
       <div className="space-y-6 px-4 pt-2 pb-8">
-        <Items {...data?.chat.product} id={0} />
+        <div className="flex items-center justify-between">
+          <Items {...data?.chat.product} id={0} />
+          {data?.chat.product.sellState === "sold" && (
+            <Button text="리뷰남기기" reviewBtnStyle small onClick={onReviewClick} />
+          )}
+        </div>
         <div className="h-[73vh] space-y-4 overflow-y-scroll px-4 pt-2  scrollbar-hide">
           {data?.chat.messages.map((message) => (
             <div key={message.id} ref={scrollRef}>
