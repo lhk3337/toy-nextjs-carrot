@@ -12,27 +12,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     await client.product.findFirst({
       where: {
         id: Number(id),
-        userId: user?.id,
+        productSellerId: user?.id,
       },
     })
   );
 
-  if (req.method === "POST") {
-    if (isWriter) {
-      const delPost = await client.product.delete({
-        where: {
-          id: Number(id),
-        },
-      });
-      res.json({ ok: true, delPost });
-    } else {
-      return;
-    }
-  }
-
-  if (req.method === "GET") {
-    res.json({ ok: true, isWriter });
+  if (isWriter) {
+    const delPost = await client.product.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.json({ ok: true, delPost });
+  } else {
+    return;
   }
 }
 
-export default withApiSession(withHandler({ methods: ["GET", "POST"], handler }));
+export default withApiSession(withHandler({ methods: ["POST"], handler }));

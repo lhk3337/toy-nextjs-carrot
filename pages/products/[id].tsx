@@ -18,7 +18,7 @@ import ProductStateText from "@components/productStateText";
 import { isSelectDealState } from "@libs/client/isSelectDealState";
 
 interface ProductWithUser extends Product {
-  user: User;
+  productSeller: User;
 }
 interface ItemDetailResponse {
   ok: boolean;
@@ -26,11 +26,6 @@ interface ItemDetailResponse {
   isLiked: boolean;
   chatId: number;
   relatedProducts: Product[];
-}
-
-interface ItemDeleteResponse {
-  ok: boolean;
-  isWriter: boolean;
 }
 
 interface DeletePost {
@@ -51,10 +46,6 @@ const ProductDetail: NextPage = () => {
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-  const { data: productSeller } = useSWR<ItemDeleteResponse>(
-    router.query.id && `/api/products/${router.query.id}/delete`
-  ); // 유저가 판매자 인지 확인하기
-
   const [deletepost, { loading, data: delPostData }] = useMutation<DeletePost>(
     `/api/products/${router.query.id}/delete`
   ); // product detail 삭제하기
@@ -81,13 +72,13 @@ const ProductDetail: NextPage = () => {
     }
   };
   const onCreateChatClick = () => {
-    if (data?.product.userId === user?.id) {
+    if (data?.product.productSellerId === user?.id) {
       alert("판매자이기 때문에 채팅을 할 수 없습니다.");
     } else {
       chat({ id: router.query.id });
     }
   };
-  // console.log(data);
+
   const onValid = (e: any) => {
     boundMutate((prev) => prev && { ...prev, product: { ...prev.product, sellState: e.target.value } }, false);
     productState({ sellState: e.target.value });
@@ -137,12 +128,12 @@ const ProductDetail: NextPage = () => {
           ) : (
             <div className="flex  items-center justify-between border-b py-3 pr-3">
               <div className="flex cursor-pointer items-center space-x-3">
-                {data?.product?.user.avatar ? (
+                {data?.product?.productSeller.avatar ? (
                   <div className="relative -z-10 h-10 w-10">
                     <Image
                       className="rounded-full"
                       layout="fill"
-                      src={data.product.user.avatar}
+                      src={data.product.productSeller.avatar}
                       alt="avatar"
                       priority
                     />
@@ -151,14 +142,16 @@ const ProductDetail: NextPage = () => {
                   <div className="h-10 w-10 rounded-full bg-slate-300" />
                 )}
                 <div>
-                  <p className="text-sm">{data?.product?.user?.name}</p>
-                  <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+                  <p className="text-sm">{data?.product?.productSeller?.name}</p>
+                  <Link href={`/users/profiles/${data?.product?.productSeller?.id}`}>
                     <a className="text-xs text-gray-500">View profile &rarr;</a>
                   </Link>
                 </div>
               </div>
               <div className=" right-2 ">
-                {productSeller?.isWriter ? <Button text="삭제" small onClick={onDelPostClick} alertColor /> : null}
+                {data?.product.productSellerId === user?.id ? (
+                  <Button text="삭제" small onClick={onDelPostClick} alertColor />
+                ) : null}
               </div>
             </div>
           )}
@@ -167,7 +160,7 @@ const ProductDetail: NextPage = () => {
               <Skeleton height={40} count={4} />
             ) : (
               <>
-                {productSeller?.isWriter ? (
+                {data?.product.productSellerId === user?.id ? (
                   <select {...register("sellState", { onChange: (e) => onValid(e) })} className="mb-3">
                     {isSelectDealState.map((el, i) => (
                       <option key={i} value={el.value}>

@@ -35,7 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         price,
         description,
         imageUrl: productImage,
-        user: { connect: { id: user?.id } },
+        productSeller: { connect: { id: user?.id } },
       },
     });
     res.json({ ok: true, product });

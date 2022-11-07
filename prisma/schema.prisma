@@ -32,6 +32,8 @@ model User {
   messages        Message[]
   sellerChat      Chat[]      @relation(name: "sellerChat")
   buyerChat       Chat[]      @relation(name: "buyerChat")
+  productSeller   Product[]   @relation(name: "productSeller")
+  productBuyer    Product[]   @relation(name: "productBuyer")
 }
 
 model Token {
@@ -44,18 +46,22 @@ model Token {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  imageUrl    String
-  name        String
-  price       Int
-  sellState   String   @default("selling")
-  description String   @db.MediumText
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  records     Record[]
-  chats       Chat[]
+  id              Int      @id @default(autoincrement())
+  imageUrl        String
+  name            String
+  price           Int
+  sellState       String   @default("selling")
+  description     String   @db.MediumText
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  productSellerId Int      @default(1)
+  productSeller   User     @relation(name: "productSeller", fields: [productSellerId], references: [id], onDelete: Cascade)
+  productBuyer    User     @relation(name: "productBuyer", fields: [productBuyerId], references: [id])
+  productBuyerId  Int      @default(1)
+  records         Record[]
+  chats           Chat[]
+  User            User?    @relation(fields: [userId], references: [id])
+  userId          Int?
 }
 
 model Post {
