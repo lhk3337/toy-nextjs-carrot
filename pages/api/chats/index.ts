@@ -18,7 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       await client.chat.findFirst({
         where: {
           productId: Number(id),
-          sellerId: productUser?.userId,
+          sellerId: productUser?.productSellerId,
           buyerId: user?.id,
         },
       })
@@ -28,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     } else {
       const createChat = await client.chat.create({
         data: {
-          seller: { connect: { id: productUser?.userId } },
+          seller: { connect: { id: productUser?.productSellerId } },
           buyer: { connect: { id: user?.id } },
           product: { connect: { id: Number(id) } },
         },
