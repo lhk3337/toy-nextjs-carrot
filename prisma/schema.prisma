@@ -21,7 +21,6 @@ model User {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
   tokens          Token[]
-  products        Product[]
   posts           Post[]
   answers         Answer[]
   wonderings      Wondering[]
@@ -54,14 +53,12 @@ model Product {
   description     String   @db.MediumText
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  productSellerId Int      @default(1)
+  productSellerId Int
   productSeller   User     @relation(name: "productSeller", fields: [productSellerId], references: [id], onDelete: Cascade)
-  productBuyer    User     @relation(name: "productBuyer", fields: [productBuyerId], references: [id])
-  productBuyerId  Int      @default(1)
+  productBuyer    User     @relation(name: "productBuyer", fields: [productBuyerId], references: [id], onDelete: Cascade)
+  productBuyerId  Int      @default(0)
   records         Record[]
   chats           Chat[]
-  User            User?    @relation(fields: [userId], references: [id])
-  userId          Int?
 }
 
 model Post {
