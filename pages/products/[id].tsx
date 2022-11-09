@@ -161,7 +161,10 @@ const ProductDetail: NextPage = () => {
             ) : (
               <>
                 {data?.product.productSellerId === user?.id ? (
-                  <select {...register("sellState", { onChange: (e) => onValid(e) })} className="mb-3">
+                  <select
+                    {...register("sellState", { onChange: (e) => onValid(e) })}
+                    className="mb-3 rounded-lg border border-gray-300 bg-gray-50 text-base"
+                  >
                     {isSelectDealState.map((el, i) => (
                       <option key={i} value={el.value}>
                         {el.name}
