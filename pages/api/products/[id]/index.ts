@@ -52,6 +52,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     res.json({ ok: true, product, chatId, isLiked, relatedProducts });
   }
   if (req.method === "POST") {
+    if (sellState === "selling") {
+      await client.product.update({
+        where: { id: Number(id) },
+        data: {
+          sellState,
+          productBuyerId: 0,
+        },
+      });
+    }
     await client.product.update({
       where: { id: Number(id) },
       data: {

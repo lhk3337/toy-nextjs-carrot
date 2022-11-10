@@ -55,8 +55,8 @@ model Product {
   updatedAt       DateTime @updatedAt
   productSellerId Int
   productSeller   User     @relation(name: "productSeller", fields: [productSellerId], references: [id], onDelete: Cascade)
-  productBuyer    User     @relation(name: "productBuyer", fields: [productBuyerId], references: [id], onDelete: Cascade)
-  productBuyerId  Int      @default(0)
+  productBuyer    User?    @relation(name: "productBuyer", fields: [productBuyerId], references: [id], onDelete: Cascade)
+  productBuyerId  Int?     @default(0)
   records         Record[]
   chats           Chat[]
 }
