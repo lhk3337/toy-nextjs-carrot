@@ -58,6 +58,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           sellState,
         },
       });
+      await client.record.create({
+        data: {
+          user: { connect: { id: chat?.sellerId } },
+          product: { connect: { id: chat?.productId } },
+          kind: "Sale",
+        },
+      });
+      await client.record.create({
+        data: {
+          user: { connect: { id: chat?.buyerId } },
+          product: { connect: { id: chat?.productId } },
+          kind: "Purchase",
+        },
+      });
     }
     if (sellState === "selling") {
       await client.product.update({
@@ -66,6 +80,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           productBuyerId: 0,
           sellState,
         },
+      });
+      await client.record.deleteMany({ where: { userId: chat?.sellerId, productId: chat?.productId, kind: "Sale" } });
+      await client.record.deleteMany({
+        where: { userId: chat?.buyerId, productId: chat?.productId, kind: "Purchase" },
       });
     }
   }

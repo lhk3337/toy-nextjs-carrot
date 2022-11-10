@@ -53,6 +53,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   }
   if (req.method === "POST") {
     if (sellState === "selling") {
+      const product = await client.product.findUnique({
+        where: { id: Number(id) },
+      });
+
+      await client.record.deleteMany({
+        where: { userId: product?.productSellerId, productId: product?.id, kind: "Sale" },
+      });
+      await client.record.deleteMany({
+        where: {
+          userId: product?.productBuyerId ? product.productBuyerId : 0,
+          productId: product?.id,
+          kind: "Purchase",
+        },
+      });
+
       await client.product.update({
         where: { id: Number(id) },
         data: {
