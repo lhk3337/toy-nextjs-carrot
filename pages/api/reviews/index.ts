@@ -7,6 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   const {
     session: { user },
   } = req;
+
   const reviews = await client.review.findMany({
     where: {
       createdForId: user?.id,
