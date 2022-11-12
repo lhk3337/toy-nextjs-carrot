@@ -108,6 +108,8 @@ model Review {
   createdFor   User?    @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId Int?
   productId    Int?     @default(1)
+  chat         Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId       Int?     @unique
 }
 
 model Record {
@@ -163,4 +165,5 @@ model Chat {
   buyerId   Int
   product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+  review    Review?
 }
