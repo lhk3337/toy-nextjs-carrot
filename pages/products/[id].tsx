@@ -79,7 +79,7 @@ const ProductDetail: NextPage = () => {
     }
   };
 
-  const onValid = (e: any) => {
+  const onValid = (e: React.ChangeEvent<HTMLInputElement>) => {
     boundMutate((prev) => prev && { ...prev, product: { ...prev.product, sellState: e.target.value } }, false);
     productState({ sellState: e.target.value });
   };
