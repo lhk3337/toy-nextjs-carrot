@@ -9,7 +9,7 @@ import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import Items from "@components/items";
 import Message from "@components/message";
-import { Chat, Product, User } from "@prisma/client";
+import { Chat, Product, Review, User } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
 import Button from "@components/button";
 import { isSelectDealState } from "@libs/client/isSelectDealState";
@@ -28,6 +28,7 @@ interface ChatWithMessage extends Chat {
   seller: User;
   product: Product;
   messages: ChatMessage[];
+  review: Review;
 }
 interface ChatResponse {
   ok: true;
@@ -48,6 +49,9 @@ const ChatDetail: NextPage = () => {
 
   const [sendMessage, { loading, data: sendMessageData }] = useMutation<any>(`/api/chats/${router.query.id}/message`);
   const [productState] = useMutation(`/api/chats/${router.query.id}`);
+
+  const [review, { loading: reviewLoading, data: reviewData }] = useMutation("/api/reviews");
+  // 리뷰쓰기 버튼 누르면 review db 생성
 
   const { register, handleSubmit, reset, setValue } = useForm<ChatForm>();
   const onValid = (form: MessageForm) => {
@@ -80,7 +84,7 @@ const ChatDetail: NextPage = () => {
     scrollRef?.current?.scrollIntoView();
   });
   const onReviewClick = () => {
-    router.push("/review");
+    review({ chatId: data?.chat.id });
   };
 
   const onDealStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -90,6 +94,20 @@ const ChatDetail: NextPage = () => {
   useEffect(() => {
     if (data?.chat.product.sellState) setValue("sellState", data.chat.product.sellState);
   }, [data?.chat.product, setValue]);
+
+  useEffect(() => {
+    if (reviewData?.ok) {
+      router.push(`/reviews/${reviewData.reviews.id}`);
+    }
+  });
+  // 해당 review 데이터가 없을 경우, review db를 생성이 될때 이때 만들어진 review id값을 가져옴
+
+  useEffect(() => {
+    if (reviewData?.ok === false) {
+      router.push(`/reviews/${data?.chat.review.id}`);
+    }
+  });
+  // 해당 review 데이터가 있다면 chat와 relation된 review id를 가져 옴
   return (
     <Layout
       canGoBack
@@ -139,20 +157,22 @@ const ChatDetail: NextPage = () => {
               </div>
             ))}
           </div>
-          <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
-            <form onSubmit={handleSubmit(onValid)} className="relative flex items-center">
-              <input
-                {...register("message", { required: true })}
-                type="text"
-                className="w-full appearance-none rounded-full  border border-gray-300  pr-12 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
-              />
-              <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-                <button className="flex cursor-pointer appearance-none items-center rounded-full bg-orange-500 px-5 text-sm text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 ">
-                  &rarr;
-                </button>
-              </div>
-            </form>
-          </div>
+          {data.chat.product.sellState !== "sold" && (
+            <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
+              <form onSubmit={handleSubmit(onValid)} className="relative flex items-center">
+                <input
+                  {...register("message", { required: true })}
+                  type="text"
+                  className="w-full appearance-none rounded-full  border border-gray-300  pr-12 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-orange-500"
+                />
+                <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                  <button className="flex cursor-pointer appearance-none items-center rounded-full bg-orange-500 px-5 text-sm text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 ">
+                    &rarr;
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
       )}
     </Layout>
