@@ -25,6 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
                   kind: { equals: "Fav" },
                 },
               },
+              chats: true,
             },
           },
         },
@@ -32,7 +33,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     },
   });
   const products = recordsQuerys?.map((product) => {
-    return { ...product, product: { ...product.product, _count: { liked: product.product._count.records } } };
+    return {
+      ...product,
+      product: {
+        ...product.product,
+        _count: { liked: product.product._count.records, chatCount: product.product._count.chats },
+      },
+    };
   });
   //_count: {records : 1} 로 출력하여 records를 liked로 바꾸기 위해 products를 사용함
 
