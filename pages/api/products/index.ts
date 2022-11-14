@@ -14,13 +14,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
                 kind: { equals: "Fav" },
               },
             },
+            chats: true,
           },
         },
       },
     });
+
     const products = productquerys.map((product) => {
-      return { ...product, _count: { liked: product._count.records } };
+      return { ...product, _count: { liked: product._count.records, chatCount: product._count.chats } };
     });
+
     res.json({ ok: true, products });
   }
   if (req.method === "POST") {

@@ -9,6 +9,7 @@ import { Product } from "@prisma/client";
 export interface ProductWithCount extends Product {
   _count: {
     liked: number;
+    chatCount: number;
   };
 }
 interface ProductResponse {
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
     <Layout title="Home" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (
-          <Items {...product} key={product.id} comment={1} />
+          <Items {...product} key={product.id} />
         ))}
         <FixedButton type="add" href="/products/upload" />
       </div>
