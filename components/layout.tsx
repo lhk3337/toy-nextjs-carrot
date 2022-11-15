@@ -7,10 +7,10 @@ interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
   children: ReactNode;
-  hasTabBar?: boolean;
+  hasBottomTabBar?: boolean;
 }
 
-export default function Layout({ title, canGoBack, hasTabBar, children }: LayoutProps) {
+export default function Layout({ title, canGoBack, hasBottomTabBar, children }: LayoutProps) {
   const router = useRouter();
   const onClick = () => {
     router.back();
@@ -38,8 +38,8 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
         )}
         {title && <span>{title}</span>}
       </div>
-      <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
-      {hasTabBar && (
+      <div className={cls("pt-12", hasBottomTabBar ? "pb-24" : "")}>{children}</div>
+      {hasBottomTabBar && (
         <nav className="fixed bottom-0 flex w-full max-w-lg items-center justify-between border-t bg-white px-10 pb-5 pt-3 text-xs text-gray-800">
           <Link href="/">
             <a className="flex flex-col items-center space-y-2">
