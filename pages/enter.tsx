@@ -79,7 +79,7 @@ export default function Enter() {
                 <button
                   onClick={onEmailClick}
                   className={cls(
-                    "pb-2 font-medium",
+                    "pb-2 font-medium transition duration-500",
                     method === "email"
                       ? "border-b-2 border-b-orange-400 text-orange-400"
                       : "border-transparent text-gray-500"
@@ -89,7 +89,7 @@ export default function Enter() {
                 </button>
                 <button
                   onClick={onPhoneClick}
-                  className={`pb-2 font-medium ${
+                  className={`pb-2 font-medium transition duration-500 ${
                     method === "phone"
                       ? "border-b-2 border-b-orange-400 text-orange-400"
                       : "border-transparent text-gray-500"
