@@ -143,7 +143,7 @@ const ProductDetail: NextPage = () => {
                 )}
                 <div>
                   <p className="text-sm">{data?.product?.productSeller?.name}</p>
-                  <Link href={`/users/profiles/${data?.product?.productSeller?.id}`}>
+                  <Link href={`/profile/${data?.product?.productSeller?.id}`}>
                     <a className="text-xs text-gray-500">View profile &rarr;</a>
                   </Link>
                 </div>
