@@ -62,7 +62,7 @@ export default function Enter() {
 
   return (
     <div className="mt-16 flex flex-col px-4">
-      <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
+      <h3 className=" text-center text-3xl font-bold">Welcome to my Carrot</h3>
       <div className="mt-11">
         {data?.ok ? (
           <form onSubmit={tokenHandleSubmit(onTokenValid)} className="mt-8 flex flex-col space-y-4">
