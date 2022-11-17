@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
-const { SEND_MAIL_USER, SEND_MAIL_PASSWORD, SEND_MAIL } = process.env;
+
 export default function sendEmail(email: string, payload: string) {
   const mailOptions = {
-    from: SEND_MAIL,
+    from: process.env.NEXT_PUBLIC_SEND_MAIL,
     to: email,
     subject: "캐럿마켓 인증 요청 메일입니다.",
     html: `
@@ -16,13 +16,13 @@ export default function sendEmail(email: string, payload: string) {
   };
   const emailConfig = nodemailer.createTransport({
     service: "Naver",
-    port: 587,
+    port: 465,
     host: "smtp.naver.com",
     secure: false,
     requireTLS: true,
     auth: {
-      user: SEND_MAIL_USER,
-      pass: SEND_MAIL_PASSWORD,
+      user: process.env.NEXT_PUBLIC_SEND_MAIL_USER,
+      pass: process.env.NEXT_PUBLIC_SEND_MAIL_PASSWORD,
     },
   });
   return emailConfig.sendMail(mailOptions, (error) => error && console.log(error));
