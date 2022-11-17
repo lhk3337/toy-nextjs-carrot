@@ -42,6 +42,8 @@ model Token {
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+
+  @@index([userId])
 }
 
 model Product {
@@ -60,6 +62,9 @@ model Product {
   records         Record[]
   chats           Chat[]
   reviews         Review[]
+
+  @@index([productBuyerId])
+  @@index([productSellerId])
 }
 
 // user 대신 seller와 buyer로 구분
@@ -75,6 +80,8 @@ model Post {
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers    Answer[]
   wonderings Wondering[]
+
+  @@index([userId])
 }
 
 model Answer {
@@ -86,6 +93,9 @@ model Answer {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([userId])
 }
 
 model Wondering {
@@ -96,6 +106,9 @@ model Wondering {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([userId])
 }
 
 // review model 설정
@@ -113,6 +126,11 @@ model Review {
   productId    Int?     @default(1)
   chat         Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId       Int?     @unique
+
+  @@index([chatId])
+  @@index([productId])
+  @@index([createdForId])
+  @@index([createdById])
 }
 
 model Record {
@@ -124,6 +142,9 @@ model Record {
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   kind      Kind
+
+  @@index([userId])
+  @@index([productId])
 }
 
 enum Kind {
@@ -142,6 +163,8 @@ model Stream {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   messages    Message[]
+
+  @@index([userId])
 }
 
 model Message {
@@ -155,6 +178,10 @@ model Message {
   streamId  Int?
   chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId    Int?
+
+  @@index([userId])
+  @@index([streamId])
+  @@index([chatId])
 }
 
 // chat model 설정
@@ -170,4 +197,8 @@ model Chat {
   product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   review    Review?
+
+  @@index([productId])
+  @@index([buyerId])
+  @@index([sellerId])
 }
