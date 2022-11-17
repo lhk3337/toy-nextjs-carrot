@@ -38,7 +38,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       messagingServiceSid: TWILIO_MSID,
     });
   } else if (email) {
-    sendEmail(email, payload);
+    await sendEmail(email, payload);
   }
 
   return res.json({
