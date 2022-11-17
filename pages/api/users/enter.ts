@@ -22,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 
   const payload = String(Math.random()).substring(2, 8);
 
-  const token = await client.token.create({
+  await client.token.create({
     data: {
       payload,
       user: {
@@ -38,7 +38,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       messagingServiceSid: TWILIO_MSID,
     });
   } else if (email) {
-    await sendEmail(email, payload);
+    // await sendEmail(email, payload);
   }
 
   return res.json({

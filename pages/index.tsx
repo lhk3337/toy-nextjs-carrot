@@ -18,7 +18,6 @@ interface ProductResponse {
 }
 
 const Home: NextPage = () => {
-  const { user, isLoading } = useUser();
   const { data, error } = useSWR<ProductResponse>("api/products");
 
   return (
