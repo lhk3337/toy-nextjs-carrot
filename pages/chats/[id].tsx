@@ -13,6 +13,7 @@ import { Chat, Product, Review, User } from "@prisma/client";
 import React, { useEffect, useRef } from "react";
 import Button from "@components/button";
 import { isSelectDealState } from "@libs/client/isSelectDealState";
+import { ProductWithCount } from "..";
 
 interface ChatMessage {
   message: string;
@@ -26,7 +27,7 @@ interface ChatMessage {
 interface ChatWithMessage extends Chat {
   buyer: User;
   seller: User;
-  product: Product;
+  product: ProductWithCount;
   messages: ChatMessage[];
   review: Review;
 }
@@ -47,7 +48,7 @@ const ChatDetail: NextPage = () => {
     refreshInterval: 1000,
   });
 
-  const [sendMessage, { loading, data: sendMessageData }] = useMutation<any>(`/api/chats/${router.query.id}/message`);
+  const [sendMessage, { loading, data: sendMessageData }] = useMutation(`/api/chats/${router.query.id}/message`);
   const [productState] = useMutation(`/api/chats/${router.query.id}`);
 
   const [review, { loading: reviewLoading, data: reviewData }] = useMutation("/api/reviews");
@@ -129,12 +130,14 @@ const ChatDetail: NextPage = () => {
               {data?.chat.product.productBuyerId === user?.id && (
                 <Button text="리뷰남기기" reviewBtnStyle small onClick={onReviewClick} />
               )}
+              {/* 구매 상태가 완료 되면 리뷰 남기기 버튼 생성 */}
             </div>
             {user?.id === data?.chat.sellerId ? (
               <select
                 {...register("sellState", { onChange: (e) => onDealStateChange(e) })}
                 className="mt-3 ml-4 rounded-lg border border-gray-300 bg-gray-50 text-sm"
               >
+                {/* 판매자만 판매 상태를 설정 할 수 있음 */}
                 {isSelectDealState.map((el, i) => (
                   <option key={i} value={el.value}>
                     {el.name}
@@ -157,6 +160,7 @@ const ChatDetail: NextPage = () => {
               </div>
             ))}
           </div>
+          {/* 판매 상태가 완료 되면 메시지창 비활성화 */}
           {data.chat.product.sellState !== "sold" && (
             <div className="fixed inset-x-0 bottom-2 mx-auto w-full max-w-md">
               <form onSubmit={handleSubmit(onValid)} className="relative flex items-center">
@@ -178,5 +182,5 @@ const ChatDetail: NextPage = () => {
     </Layout>
   );
 };
-
+// chat detail page
 export default ChatDetail;

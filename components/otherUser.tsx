@@ -44,3 +44,4 @@ export default function OtherUser({ chatImg, userId }: ChatImages) {
     </>
   );
 }
+// 상대방의 이름과 마지막 채팅 메시지를 담고 있는 정보

@@ -62,6 +62,8 @@ model Product {
   reviews         Review[]
 }
 
+// user 대신 seller와 buyer로 구분
+
 model Post {
   id         Int         @id @default(autoincrement())
   question   String      @db.MediumText
@@ -96,6 +98,7 @@ model Wondering {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
+// review model 설정
 model Review {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
@@ -154,6 +157,7 @@ model Message {
   chatId    Int?
 }
 
+// chat model 설정
 model Chat {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())

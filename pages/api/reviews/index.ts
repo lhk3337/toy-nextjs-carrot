@@ -61,5 +61,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     }
   }
 }
-
+// 채팅에서 review버튼 클릭 하면 review가 생성 됨
 export default withApiSession(withHandler({ methods: ["GET", "POST"], handler }));

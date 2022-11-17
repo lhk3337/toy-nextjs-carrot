@@ -24,5 +24,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     res.json({ ok: true });
   }
 }
-
+// 리뷰 남기기 페이지에서 리뷰 내용이 업데이트 됨
 export default withApiSession(withHandler({ methods: ["GET", "POST"], handler }));

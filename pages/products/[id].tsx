@@ -71,6 +71,7 @@ const ProductDetail: NextPage = () => {
     } else {
     }
   };
+  //Talk to Seller 버튼 클릭 할 경우
   const onCreateChatClick = () => {
     if (data?.product.productSellerId === user?.id) {
       alert("판매자이기 때문에 채팅을 할 수 없습니다.");
@@ -83,6 +84,8 @@ const ProductDetail: NextPage = () => {
     boundMutate((prev) => prev && { ...prev, product: { ...prev.product, sellState: e.target.value } }, false);
     productState({ sellState: e.target.value });
   };
+  // productState :  select tag 판매 상태를 api로 보내기
+
   useEffect(() => {
     if (delPostData?.ok) {
       router.push("/");
@@ -94,15 +97,17 @@ const ProductDetail: NextPage = () => {
       router.push(`/chats/${chatData.createChat.id}`);
     }
   }, [router, chatData]);
-
+  // chate page 이동
   useEffect(() => {
     if (chatData?.ok === false) {
       router.push(`/chats/${data?.chatId}`);
     }
   }, [chatData?.ok, data?.chatId, router]);
+
   useEffect(() => {
     if (data?.product.sellState) setValue("sellState", data?.product.sellState);
   }, [data?.product, setValue]);
+  // 판매 상태 값을 api에서 가져와 select tag에 적용하기
 
   return (
     <Layout canGoBack>
@@ -149,6 +154,7 @@ const ProductDetail: NextPage = () => {
                 </div>
               </div>
               <div className=" right-2 ">
+                {/* product 삭제 하기 버튼 */}
                 {data?.product.productSellerId === user?.id ? (
                   <Button text="삭제" small onClick={onDelPostClick} alertColor />
                 ) : null}
@@ -165,6 +171,7 @@ const ProductDetail: NextPage = () => {
                     {...register("sellState", { onChange: (e) => onValid(e) })}
                     className="mb-3 rounded-lg border border-gray-300 bg-gray-50 text-base"
                   >
+                    {/* 판매자만 판매 상태 select tag가 나타남 */}
                     {isSelectDealState.map((el, i) => (
                       <option key={i} value={el.value}>
                         {el.name}
@@ -178,6 +185,7 @@ const ProductDetail: NextPage = () => {
                 <p className="mt-3 text-2xl">{data?.product?.price.toLocaleString("ko-KR")}원</p>
                 <p className="my-6">{data?.product?.description}</p>
                 <div className="my-4 flex items-center justify-between space-x-2 ">
+                  {/* 판매 상태에 따른 버튼 상태 변경 */}
                   {data?.product.sellState === "sold" ? (
                     <Button sold large text="판매 완료 된 상품 입니다." />
                   ) : data.product.sellState === "reserve" ? (

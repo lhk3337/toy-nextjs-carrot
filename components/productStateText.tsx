@@ -26,3 +26,4 @@ export default function ProductStateText({ data, small = false }: Props) {
     </span>
   );
 }
+// 판매 상태에 따른 글자색 변경

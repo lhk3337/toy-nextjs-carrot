@@ -31,6 +31,7 @@ const Chats: NextPage = () => {
             <Link href={`chats/${chat.id}`} key={chat.id}>
               <a className="flex cursor-pointer items-center space-x-3 px-4 py-3">
                 <OtherUser chatImg={chat} userId={user?.id} />
+                {/* 채팅할 상대방 이름과 마지막 메시지를 갖고 있는 component */}
               </a>
             </Link>
           );

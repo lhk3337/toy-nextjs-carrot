@@ -69,3 +69,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 }
 
 export default withApiSession(withHandler({ methods: ["POST", "GET"], handler }));
+// chat list api

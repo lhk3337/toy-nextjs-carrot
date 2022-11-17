@@ -44,5 +44,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     res.json({ ok: true, product });
   }
 }
-
+// 상품을 업로드 시키면 productSeller에 판매자가 등록 됨
 export default withApiSession(withHandler({ methods: ["GET", "POST"], handler }));

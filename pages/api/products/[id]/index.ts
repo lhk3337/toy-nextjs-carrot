@@ -60,6 +60,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       await client.record.deleteMany({
         where: { userId: product?.productSellerId, productId: product?.id, kind: "Sale" },
       });
+      // 판매 상태가 판매중이면 판매된 상품 db를 삭제하기
       await client.record.deleteMany({
         where: {
           userId: product?.productBuyerId ? product.productBuyerId : 0,
@@ -67,7 +68,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
           kind: "Purchase",
         },
       });
+      // 판매 상태가 판매중이면 산 상품 상품 db를 삭제하기
 
+      // 판매 상태가 판매중이면 product의 productBuyer를 초기화 시킴
       await client.product.update({
         where: { id: Number(id) },
         data: {

@@ -91,3 +91,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 }
 
 export default withApiSession(withHandler({ methods: ["GET", "POST"], handler }));
+// chat detail api
