@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import { cls } from "@libs/client/utils";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import Bs from "@components/bs";
+
+// const Bs = dynamic(() => import("@components/bs"));
 
 interface EnterForm {
   email?: string;
@@ -112,14 +116,17 @@ export default function Enter() {
                   />
                 )}
                 {method === "phone" && (
-                  <Input
-                    register={register("phone")}
-                    kind="phone"
-                    label="Phone number"
-                    name="phone"
-                    type="number"
-                    required
-                  />
+                  <>
+                    <Bs />
+                    <Input
+                      register={register("phone")}
+                      kind="phone"
+                      label="Phone number"
+                      name="phone"
+                      type="number"
+                      required
+                    />
+                  </>
                 )}
               </div>
               {method === "email" && <Button text={loading ? "Loading" : "Get login link"} />}
