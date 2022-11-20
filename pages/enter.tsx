@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Button from "@components/button";
 import Input from "@components/input";
 import { useForm } from "react-hook-form";
@@ -6,9 +6,19 @@ import { cls } from "@libs/client/utils";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import Bs from "@components/bs";
+/*
+import Bs from "@components/bs"; -> import
 
-// const Bs = dynamic(() => import("@components/bs"));
+const Bs = dynamic(() => import("@components/bs")); -> dynamic import
+*/
+
+const Bs = dynamic(() => new Promise((resolve) => setTimeout(() => resolve(import("@components/bs")), 10000)), {
+  ssr: false,
+  loading: () => <p>Loading... Big Component</p>,
+  suspense: true,
+});
+// Lazy-load Import
+// suspense, loading 같은역할, suspense는 JSX에 넣을 수 있음, loading은 위의 코드에 넣을 수 있음.
 
 interface EnterForm {
   email?: string;
@@ -117,7 +127,9 @@ export default function Enter() {
                 )}
                 {method === "phone" && (
                   <>
-                    <Bs />
+                    <Suspense fallback="Loadingsomething">
+                      <Bs />
+                    </Suspense>
                     <Input
                       register={register("phone")}
                       kind="phone"
