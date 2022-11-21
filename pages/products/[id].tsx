@@ -110,7 +110,7 @@ const ProductDetail: NextPage = () => {
   // 판매 상태 값을 api에서 가져와 select tag에 적용하기
 
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle={data?.product.name ? data?.product.name : "loading... "}>
       <div className="py-10 px-4">
         <div className="mb-8">
           {!data ? (

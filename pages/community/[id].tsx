@@ -82,7 +82,7 @@ const CommunityPostDetail: NextPage = () => {
     }
   }, [answerData, reset, mutate]);
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle={` ${data?.post.id ? `Community ${data?.post.id}` : "loading.."}`}>
       <div className="py-4">
         <span className="items-cente my-2.5 mb-3 ml-4 inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
           동네질문

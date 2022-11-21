@@ -33,7 +33,11 @@ const UserProfile: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack title="User Profile">
+    <Layout
+      canGoBack
+      title="User Profile"
+      seoTitle={`${data?.Profiles.userProfile.name ? `${data?.Profiles.userProfile.name}  Profile` : "loading"} `}
+    >
       <div className="flex items-center justify-around px-3  py-12 ">
         {data?.Profiles.userProfile.avatar ? (
           <div className="relative -z-10 h-24 w-24">

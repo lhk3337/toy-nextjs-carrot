@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { cls } from "@libs/client/utils";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import Head from "next/head";
 // import dynamic from "next/dynamic";
 /*
 import Bs from "@components/bs"; -> import
@@ -81,6 +82,9 @@ export default function Enter() {
 
   return (
     <div className="mt-16 flex flex-col px-4">
+      <Head>
+        <title>Enter to Carrot | Carrot Market</title>
+      </Head>
       <h3 className=" text-center text-3xl font-bold">Enter to Carrot</h3>
       <div className="mt-11">
         {data?.ok ? (

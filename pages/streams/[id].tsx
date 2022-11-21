@@ -65,7 +65,7 @@ const StreamDetail: NextPage = () => {
     scrollRef?.current?.scrollIntoView();
   });
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="live Detail">
       <div className="space-y-5 py-6 px-4 pb-10">
         <div className="aspect-video w-full rounded-md bg-slate-300" />
         <div className="mt-5">

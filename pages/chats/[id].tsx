@@ -108,18 +108,22 @@ const ChatDetail: NextPage = () => {
       router.push(`/reviews/${data?.chat.review.id}`);
     }
   });
+  const chatUser = () => {
+    if (!user?.id || !data?.chat.sellerId || !data?.chat.buyerId) {
+      return "Loading";
+    } else {
+      if (user?.id === data?.chat.sellerId) {
+        return `with ${data?.chat.buyer.name}`;
+      }
+
+      if (user?.id === data?.chat.buyerId) {
+        return `with ${data?.chat.seller.name}`;
+      }
+    }
+  };
   // 해당 review 데이터가 있다면 chat와 relation된 review id를 가져 옴
   return (
-    <Layout
-      canGoBack
-      title={
-        user?.id === data?.chat.sellerId
-          ? data?.chat.buyer.name
-          : user?.id === data?.chat.buyerId
-          ? data?.chat.seller.name
-          : ""
-      }
-    >
+    <Layout canGoBack title={chatUser()} seoTitle={`chat  ${chatUser()} `}>
       {!data ? (
         <div className=" mt-5 h-[90vh] w-full  rounded-lg bg-slate-200" />
       ) : (
