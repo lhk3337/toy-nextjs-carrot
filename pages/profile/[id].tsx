@@ -36,7 +36,9 @@ const UserProfile: NextPage = () => {
     <Layout
       canGoBack
       title="User Profile"
-      seoTitle={`${data?.Profiles.userProfile.name ? `${data?.Profiles.userProfile.name}  Profile` : "loading"} `}
+      seoTitle={`${
+        data?.Profiles.userProfile.name ? `${data?.Profiles.userProfile.name}  Profile | Carrot Market` : "loading"
+      } `}
     >
       <div className="flex items-center justify-around px-3  py-12 ">
         {data?.Profiles.userProfile.avatar ? (

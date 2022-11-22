@@ -83,7 +83,7 @@ const Upload: NextPage = () => {
   }, [setImageFile, imageFile, watch, productImg]);
 
   return (
-    <Layout canGoBack title="Upload" seoTitle="Upload Product">
+    <Layout canGoBack title="Upload" seoTitle="Upload Product | Carrot Market">
       <form className="space-y-5 px-4 py-10" onSubmit={handleSubmit(onValid)}>
         <div>
           {productPreview ? (

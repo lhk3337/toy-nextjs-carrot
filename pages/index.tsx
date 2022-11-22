@@ -5,7 +5,7 @@ import Items from "@components/items";
 import useUser from "@libs/client/useUser";
 import useSWR, { SWRConfig } from "swr";
 import { Product } from "@prisma/client";
-
+import client from "@libs/server/client";
 export interface ProductWithCount extends Product {
   _count: {
     liked: number;
@@ -18,10 +18,10 @@ interface ProductResponse {
 }
 
 const Home: NextPage = () => {
-  const { data, error } = useSWR<ProductResponse>("/api/products");
+  const { data, error } = useSWR<ProductResponse>("api/products");
 
   return (
-    <Layout title="Home" hasBottomTabBar seoTitle="Home">
+    <Layout title="Home" hasBottomTabBar seoTitle="Home | Carrot Market">
       <div className="flex flex-col space-y-5 divide-y">
         {data?.products?.map((product) => (
           <Items {...product} key={product.id} />
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => (
   <SWRConfig
     value={{
-      fallback: { "/api/products": { ok: true, products } },
+      fallback: { "api/products": { ok: true, products } },
     }}
   >
     <Home />

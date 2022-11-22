@@ -26,7 +26,7 @@ const Community: NextPage = () => {
     latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
   );
   return (
-    <Layout title="DN Life" hasBottomTabBar seoTitle="DN Life">
+    <Layout title="DN Life" hasBottomTabBar seoTitle="DN Life | Carrot Market">
       <div className="space-y-4 divide-y-[1px]">
         {data?.posts?.map((post) => {
           const createTime = new Date(post.createdAt);

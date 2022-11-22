@@ -24,7 +24,7 @@ const Chats: NextPage = () => {
   const { user } = useUser();
 
   return (
-    <Layout title="Chat" hasBottomTabBar seoTitle="Chat List">
+    <Layout title="Chat" hasBottomTabBar seoTitle="Chat List | Carrot Market">
       <div className="divide-y-[1px] pt-1">
         {data?.chatList.map((chat) => {
           return (

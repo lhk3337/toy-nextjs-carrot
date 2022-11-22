@@ -117,7 +117,7 @@ const Edit: NextPage = () => {
   }, [imageFile, setAvatar]);
 
   return (
-    <Layout canGoBack title="Edit Profile" seoTitle="edit Profile">
+    <Layout canGoBack title="Edit Profile" seoTitle="edit Profile | Carrot Market">
       <form className="space-y-4 py-10 px-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center space-x-4">
           {avatarPreview ? (

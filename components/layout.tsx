@@ -20,7 +20,7 @@ export default function Layout({ title, canGoBack, hasBottomTabBar, children, se
   return (
     <div>
       <Head>
-        <title>{seoTitle} | Carrot Market</title>
+        <title>{seoTitle}</title>
       </Head>
       <div
         className={cls(

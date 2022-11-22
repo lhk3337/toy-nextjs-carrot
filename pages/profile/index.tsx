@@ -40,7 +40,7 @@ const Profile: NextPage = () => {
     }
   }, [logoutData, router]);
   return (
-    <Layout title="User" hasBottomTabBar seoTitle="Profile">
+    <Layout title="User" hasBottomTabBar seoTitle="profile | Carrot Market">
       <div className="px-4">
         <div className="flex items-center justify-between px-4 pt-4">
           <div className="mt-4 flex items-center space-x-3">

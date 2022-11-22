@@ -38,7 +38,7 @@ const Streams: NextPage = () => {
     });
 
   return (
-    <Layout title="Live" hasBottomTabBar seoTitle="Live">
+    <Layout title="Live" hasBottomTabBar seoTitle="live | Carrot Market">
       {!data ? (
         <>
           {Array.from(Array(10).keys()).map((_, i) => {

@@ -123,7 +123,7 @@ const ChatDetail: NextPage = () => {
   };
   // 해당 review 데이터가 있다면 chat와 relation된 review id를 가져 옴
   return (
-    <Layout canGoBack title={chatUser()} seoTitle={`chat  ${chatUser()} `}>
+    <Layout canGoBack title={chatUser()} seoTitle={`chat  ${chatUser()}  | Carrot Market`}>
       {!data ? (
         <div className=" mt-5 h-[90vh] w-full  rounded-lg bg-slate-200" />
       ) : (

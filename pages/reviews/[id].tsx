@@ -65,7 +65,7 @@ const Review: NextPage = () => {
           <div className=" rounded-lg border-[1px] bg-slate-200  px-32 py-36" />
         </div>
       ) : (
-        <Layout canGoBack title="리뷰 쓰기" seoTitle="write Review">
+        <Layout canGoBack title="리뷰 쓰기" seoTitle="write Review | Carrot Market">
           {data?.reviewData.createdById !== user?.id ? (
             <div className="py-10">
               <Button large text="되돌아가기" onClick={onBackClick} />
