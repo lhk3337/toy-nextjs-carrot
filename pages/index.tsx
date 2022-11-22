@@ -17,13 +17,13 @@ interface ProductResponse {
   products: ProductWithCount[];
 }
 
-const Home: NextPage = () => {
-  const { data, error } = useSWR<ProductResponse>("api/products");
+const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  // const { data, error } = useSWR<ProductResponse>("api/products");
 
   return (
     <Layout title="Home" hasBottomTabBar seoTitle="Home">
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product) => (
+        {products?.map((product) => (
           <Items {...product} key={product.id} />
         ))}
         <FixedButton type="add" href="/products/upload" />
@@ -31,5 +31,29 @@ const Home: NextPage = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps() {
+  const productquerys = await client?.product.findMany({
+    include: {
+      _count: {
+        select: {
+          records: {
+            where: {
+              kind: { equals: "Fav" },
+            },
+          },
+          chats: true,
+        },
+      },
+    },
+  });
+  const products = productquerys?.map((product) => {
+    return { ...product, _count: { liked: product._count.records, chatCount: product._count.chats } };
+  });
+
+  return {
+    props: { products: JSON.parse(JSON.stringify(products)) },
+  };
+}
 
 export default Home;
