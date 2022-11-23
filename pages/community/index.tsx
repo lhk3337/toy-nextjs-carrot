@@ -21,14 +21,14 @@ interface PostResponse {
 }
 
 const Community: NextPage<PostResponse> = ({ posts }) => {
-  // const { latitude, longitude } = useCoords();
-  // const { data } = useSWR<PostResponse>(
-  //   latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
-  // );
+  const { latitude, longitude } = useCoords();
+  const { data } = useSWR<PostResponse>(
+    latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
+  );
   return (
     <Layout title="DN Life" hasBottomTabBar seoTitle="DN Life | Carrot Market">
       <div className="space-y-4 divide-y-[1px]">
-        {posts?.map((post) => {
+        {data?.posts?.map((post) => {
           const createTime = new Date(post.createdAt);
 
           return (
@@ -89,31 +89,5 @@ const Community: NextPage<PostResponse> = ({ posts }) => {
     </Layout>
   );
 };
-
-export async function getStaticProps() {
-  const posts = await client.post.findMany({
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          avatar: true,
-        },
-      },
-      _count: {
-        select: {
-          wonderings: true,
-          answers: true,
-        },
-      },
-    },
-  });
-  return {
-    props: {
-      posts: JSON.parse(JSON.stringify(posts)),
-    },
-    revalidate: 10,
-  };
-}
 
 export default Community;
