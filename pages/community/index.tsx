@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import FixedButton from "@components/fixedCircleBtn";
 import Layout from "@components/layout";
@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/client/useCoords";
 import Time from "@components/time";
-
+import client from "@libs/server/client";
 interface PostwithUser extends Post {
   user: User;
   _count: {
@@ -20,15 +20,15 @@ interface PostResponse {
   posts: PostwithUser[];
 }
 
-const Community: NextPage = () => {
-  const { latitude, longitude } = useCoords();
-  const { data } = useSWR<PostResponse>(
-    latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
-  );
+const Community: NextPage<PostResponse> = ({ posts }) => {
+  // const { latitude, longitude } = useCoords();
+  // const { data } = useSWR<PostResponse>(
+  //   latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null
+  // );
   return (
     <Layout title="DN Life" hasBottomTabBar seoTitle="DN Life | Carrot Market">
       <div className="space-y-4 divide-y-[1px]">
-        {data?.posts?.map((post) => {
+        {posts?.map((post) => {
           const createTime = new Date(post.createdAt);
 
           return (
@@ -60,7 +60,7 @@ const Community: NextPage = () => {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <span>궁금해요 {post._count.wonderings}</span>
+                    <span>궁금해요 {post._count?.wonderings}</span>
                   </span>
                   <span className="flex items-center space-x-2 text-sm">
                     <svg
@@ -77,7 +77,7 @@ const Community: NextPage = () => {
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       ></path>
                     </svg>
-                    <span>답변 {post._count.answers}</span>
+                    <span>답변 {post._count?.answers}</span>
                   </span>
                 </div>
               </a>
@@ -89,5 +89,31 @@ const Community: NextPage = () => {
     </Layout>
   );
 };
+
+export async function getStaticProps() {
+  const posts = await client.post.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      _count: {
+        select: {
+          wonderings: true,
+          answers: true,
+        },
+      },
+    },
+  });
+  return {
+    props: {
+      posts: JSON.parse(JSON.stringify(posts)),
+    },
+    revalidate: 10,
+  };
+}
 
 export default Community;
