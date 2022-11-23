@@ -11,6 +11,10 @@ export const middleware = (req: NextRequest, ev: NextFetchEvent) => {
       req.nextUrl.pathname = "/enter";
       return NextResponse.redirect(req.nextUrl);
     }
+    if (req.cookies.has("carrotsession") && req.url.includes("/enter")) {
+      req.nextUrl.pathname = "/";
+      return NextResponse.redirect(req.nextUrl);
+    }
   }
 };
 
