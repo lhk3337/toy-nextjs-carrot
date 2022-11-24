@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export default function sendEmail(email: string, payload: string) {
+const sendEmail = async (email: string, payload: string) => {
   const mailOptions = {
     from: process.env.NEXT_PUBLIC_SEND_MAIL,
     to: email,
@@ -25,5 +25,17 @@ export default function sendEmail(email: string, payload: string) {
       pass: process.env.NEXT_PUBLIC_SEND_MAIL_PASSWORD,
     },
   });
-  return emailConfig.sendMail(mailOptions, (error) => error && console.log(error));
-}
+  await new Promise((resolve, reject) => {
+    return emailConfig.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(info);
+      }
+    });
+  });
+  // return emailConfig.sendMail(mailOptions, (error) => error && console.log(error));
+};
+
+export default sendEmail;
