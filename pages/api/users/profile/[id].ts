@@ -10,6 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   } = req;
   const userProfile = await client.user.findUnique({
     where: { id: Number(id) },
+    select: { avatar: true, name: true, id: true },
   });
 
   const sellProducts = await client.product.findMany({
